@@ -1,4 +1,3 @@
-from wtforms.validators import Email, Regexp
 from sqlalchemy.orm import validates
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy_serializer import SerializerMixin
@@ -47,16 +46,10 @@ class User(db.Model, SerializerMixin):
     
     @validates('email')
     def validate_email(self, key, email):
-        Email()(None, email)
         existing_user = User.query.filter(User.email == email).first()
         if existing_user and existing_user.id != self.id:
             raise ValueError('Email address already registered')
         return email
-    
-    @validates('first_name', 'last_name')
-    def validate_name(self, key, name):
-        Regexp('^[A-Za-z ]+$', message='Name can only contain letters')(None, name)
-        return name
     
 
 
