@@ -1,66 +1,73 @@
-from flask import make_response
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import MetaData
 from sqlalchemy.orm import validates
-from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy_serializer import SerializerMixin
 
-metadata = MetaData(naming_convention={
-    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
-})
+from config import bcrypt, db
 
-db = SQLAlchemy(metadata=metadata)
+class User(db.Model, SerializerMixin):
+    __tablename__ = 'users'
 
-# Add models here
-
-metadata = MetaData(naming_convention={
-    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
-})
-
-db = SQLAlchemy(metadata=metadata)
-
-class Pizza(db.Model, SerializerMixin):
-    __tablename__ = 'pizzas'
-
-    serialize_rules = ('-restaurant-pizzas.pizza',)
+    serialize_rules = ('-room_users.user',)
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    ingredients = db.Column(db.String)
+    first_name = db.Column(db.String, nullable=False)
+    last_name = db.Column(db.String, nullable=False)
+    email = db.Column(db.String, nullable=False)
+    _password_hash = db.Column(db.String, nullable=False)
+    image = db.Column(db.String)
+    is_online = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    restaurant_pizzas = db.relationship('RestaurantPizza', backref='pizza', cascade='all, delete, delete-orphan')
+    rooms = db.relationship('RoomUser', backref='user', cascade='all, delete, delete-orphan')
+
+    @hybrid_property
+    def password_hash(self):
+        raise AttributeError('Password hashes may not be viewed.')
+
+    @password_hash.setter
+    def password_hash(self, password):
+        password_hash = bcrypt.generate_password_hash(
+            password.encode('utf-8'))
+        self._password_hash = password_hash.decode('utf-8')
+
+    def authenticate(self, password):
+        return bcrypt.check_password_hash(
+            self._password_hash, password.encode('utf-8'))
+
+class Conversation(db.Model, SerializerMixin):
+    __tablename__ = 'conversations'
+
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    receiver_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    message = db.Column(db.String)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
+
+    sender = db.relationship('User', foreign_keys=[sender_id])
+    receiver = db.relationship('User', foreign_keys=[receiver_id])
     
-class Restaurant(db.Model, SerializerMixin):
-    __tablename__ = 'restaurants'
+class Room(db.Model, SerializerMixin):
+    __tablename__ = 'rooms'
 
-    serialize_rules = ('-restaurant-pizzas.restaurant',)
+    serialize_rules = ('-room_users.room',)
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    address = db.Column(db.String)
+    topic = db.Column(db.String)
+    members = db.Column(db.Integer, default=0)
+    votes = db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    pizzas = db.relationship('RestaurantPizza', backref='restaurant', cascade='all, delete, delete-orphan')
+    users = db.relationship('RoomUser', backref='room', cascade='all, delete, delete-orphan')
 
-class RestaurantPizza(db.Model, SerializerMixin):
-    __tablename__ = 'restaurant_pizzas'
+class RoomUser(db.Model, SerializerMixin):
+    __tablename__ = 'room_users'
 
-    serialize_rules = ('-pizza.restaurant_pizzas', '-restaurant.pizzas',)
+    serialize_rules = ('-room.users', '-user.rooms',)
 
     id = db.Column(db.Integer, primary_key=True)
-    pizza_id = db.Column(db.Integer, db.ForeignKey('pizzas.id'))
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
-    price = db.Column(db.Integer)
-    created_at = db.Column(db.DateTime, server_default=db.func.now())
-    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
-    
-    @validates('price')
-    def validate_price(self, key, price):
-        price = int(price)
-        if price < 1 or price > 30:
-            # return make_response({'error': 'Invalid input'}, 400)
-            raise AssertionError('Invalid input')
-        return price
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    room_id = db.Column(db.Integer, db.ForeignKey('rooms.id'))
+
