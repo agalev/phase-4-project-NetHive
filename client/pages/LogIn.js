@@ -2,23 +2,35 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { login } from '../store/userSlice'
+
 export default function Login() {
+  const dispatch = useDispatch();
+  const loggedUser = useSelector((state) => state.user);
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  
   const router = useRouter();
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-    // handle form submission
+    const user = {
+      id: 1,
+      name: 'John Doe',
+      email: 'email.com',
+      image: 'https://i.pravatar.cc/150?img=1'
+    }
+    dispatch(login(user));
     router.push('/Main');
   }
-
+  
   const handleChange = (e) => {
     if (e.target.name === 'email') setEmail(e.target.value);
     else setPassword(e.target.value);
   }
-
+  
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="bg-white p-10 rounded-lg shadow-md">
