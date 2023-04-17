@@ -40,8 +40,9 @@ class Signup(Resource):
         return {'error': 'No data provided'}, 400
     
 class Login(Resource):
-    def post(self):
+    def patch(self):
         req = request.get_json()
+        print(req)
         if req:
             try:
                 user = User.query.filter(User.email == req['email']).first()
