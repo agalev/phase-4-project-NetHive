@@ -7,6 +7,11 @@ from config import app, api, db
 
 from models import User, Conversation, Room, RoomUser
 
+@app.before_request
+def before_request():
+    if 'user_id' not in session and request.endpoint not in ['login', 'signup']:
+        return {'error': 'Not logged in'}, 401
+
 class CheckAuth(Resource):
     def get(self):
         if 'user_id' in session:
@@ -22,7 +27,8 @@ class Signup(Resource):
                     first_name=req['first_name'],
                     last_name=req['last_name'],
                     email=req['email'],
-                    image=req['image'] if 'image' in req else None
+                    image=req['image'] if 'image' in req else None,
+                    is_online=True
                 )
                 new_user.password_hash = req['password']
                 db.session.add(new_user)
@@ -51,28 +57,25 @@ class Login(Resource):
     
 class Logout(Resource):
     def delete(self):
-        if 'user_id' in session:
             user = User.query.filter(User.id == session['user_id']).first()
             user.is_online = False
             db.session.commit()
             session.pop('user_id')
             return {'success': 'Logged out'}, 200
-        return {'error': 'Not logged in'}, 401
     
 class GetUsers(Resource):
     def get(self):
-        return [user.to_dict(only = ('id','first_name','last_name','email','image','is_online')) for user in User.query.all()], 200
+        return [user.to_dict(only = ('id','first_name','last_name','email','image','is_online',)) for user in User.query.all()], 200
     
 class UsersControllerByID(Resource):
     def get(self, id):
         try:
-            return User.query.filter(User.id == id).first().to_dict(only = ('id','first_name','last_name','email','image','is_online')), 200
+            return User.query.filter(User.id == id).first().to_dict(only = ('id','first_name','last_name','email','image','is_online','rooms.room')), 200
         except:
             return {'error': 'User not found.'}, 400
     def patch(self, id):
         req = request.get_json()
-        # check if user is logged in
-        if req:
+        if session['user_id'] == id:
             try:
                 user = User.query.filter(User.id == id).first()
                 for attr in req:
@@ -81,12 +84,13 @@ class UsersControllerByID(Resource):
                 return user.to_dict(only = ('id','first_name','last_name','email','image')), 200
             except Exception as e:
                 return {'error': str(e)}, 400
-        return {'error': 'No data provided'}, 400
+        return {'error': 'Not authorized'}, 401
     def delete(self, id):
         # check if user is logged in and clear session after delete
         try:
             db.session.delete(User.query.filter(User.id == id).first())
             db.session.commit()
+            session['user_id'] = None
             return {'message': 'User deleted'}, 200
         except:
             return {'error': 'User not found'}, 400
@@ -111,33 +115,48 @@ class RoomsController(Resource):
 class RoomsControllerByID(Resource):
     def get(self, id):
         try:
-            return Room.query.filter(Room.id == id).first().to_dict(only = ('id','topic','members','users')), 200
+            return Room.query.filter(Room.id == id).first().to_dict(only = ('id','topic','members','users.user')), 200
         except:
             return {'error': 'Room not found.'}, 400
-
-class JoinRoom(Resource):
     def patch(self, id):
-
-        req = request.get_json()
-        if req:
-            try:
-                room = Room.query.filter(Room.id == id).first()
-                user = User.query.filter(User.id == req['user_id']).first()
-                room.members.append(user)
+        try:
+            room = Room.query.filter(Room.id == id).first()
+            user = User.query.filter(User.id == session['user_id']).first()
+            new_room_user = RoomUser(
+                room_id=room.id,
+                user_id=user.id
+            )
+            if RoomUser.query.filter(RoomUser.room_id == room.id, RoomUser.user_id == user.id).first():
+                return {'error': 'Already joined room.'}, 400
+            else:
+                room.members += 1
+                db.session.add(room)
+                db.session.add(new_room_user)
                 db.session.commit()
-                return room.to_dict(only = ('id','topic','members','users')), 200
-            except Exception as e:
-                return {'error': str(e)}, 400
-        return {'error': 'No data provided'}, 400
+                return {'message': 'Joined room.'}, 200
+        except Exception as e:
+            return {'error': str(e)}, 400
+    def delete(self, id):
+        try:
+            room = Room.query.filter(Room.id == id).first()
+            user = User.query.filter(User.id == session['user_id']).first()
+            room_user = RoomUser.query.filter(RoomUser.room_id == room.id, RoomUser.user_id == user.id).first()
+            room.members -= 1
+            db.session.add(room)
+            db.session.delete(room_user)
+            db.session.commit()
+            return {'message': 'Left Room.'}, 200
+        except Exception as e:
+            return {'error': str(e)}, 400
 
-        
-
-api.add_resource(CheckAuth, '/check_auth', endpoint='check_auth')
+api.add_resource(CheckAuth, '/check_auth')
 api.add_resource(Signup, '/signup')
 api.add_resource(Login, '/login')
 api.add_resource(Logout, '/logout')
 api.add_resource(GetUsers, '/users')
 api.add_resource(UsersControllerByID, '/users/<int:id>')
 api.add_resource(RoomsController, '/rooms')
+api.add_resource(RoomsControllerByID, '/rooms/<int:id>')
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
