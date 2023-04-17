@@ -12,6 +12,7 @@ class CheckAuth(Resource):
         if 'user_id' in session:
             return {'user_id': session['user_id']}, 200
         return {'error': 'Not logged in'}, 401
+    
 class Signup(Resource):
     def post(self):
         req = request.get_json()
@@ -31,6 +32,7 @@ class Signup(Resource):
             except Exception as e:
                 return {'error': str(e)}, 400
         return {'error': 'No data provided'}, 400
+    
 class Login(Resource):
     def post(self):
         req = request.get_json()
@@ -39,20 +41,28 @@ class Login(Resource):
                 user = User.query.filter(User.email == req['email']).first()
                 if user and user.authenticate(req['password']):
                     session['user_id'] = user.id
+                    user.is_online = True
+                    db.session.commit()
                     return user.to_dict(only = ('id','first_name','last_name','email','image','is_online')), 200
                 return {'error': 'Invalid credentials'}, 400
             except Exception as e:
                 return {'error': str(e)}, 400
         return {'error': 'No data provided'}, 400
+    
 class Logout(Resource):
     def delete(self):
         if 'user_id' in session:
+            user = User.query.filter(User.id == session['user_id']).first()
+            user.is_online = False
+            db.session.commit()
             session.pop('user_id')
             return {'success': 'Logged out'}, 200
         return {'error': 'Not logged in'}, 401
+    
 class GetUsers(Resource):
     def get(self):
         return [user.to_dict(only = ('id','first_name','last_name','email','image','is_online')) for user in User.query.all()], 200
+    
 class UsersControllerByID(Resource):
     def get(self, id):
         try:
@@ -80,6 +90,8 @@ class UsersControllerByID(Resource):
             return {'message': 'User deleted'}, 200
         except:
             return {'error': 'User not found'}, 400
+
+
 
 api.add_resource(CheckAuth, '/check_auth')
 api.add_resource(Signup, '/signup')
