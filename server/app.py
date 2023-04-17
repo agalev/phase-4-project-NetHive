@@ -10,7 +10,7 @@ from models import User, Conversation, Room, RoomUser
 class CheckAuth(Resource):
     def get(self):
         if 'user_id' in session:
-            return {'user_id': session['user_id']}, 200
+            return User.query.filter(User.id == session['user_id']).first().to_dict(only = ('id','first_name','last_name','email','image','is_online')), 200
         return {'error': 'Not logged in'}, 401
     
 class Signup(Resource):
@@ -91,13 +91,53 @@ class UsersControllerByID(Resource):
         except:
             return {'error': 'User not found'}, 400
 
+class RoomsController(Resource):
+    def post(self):
+        req = request.get_json()
+        if req:
+            try:
+                new_room = Room(
+                    topic=req['topic']
+                )
+                db.session.add(new_room)
+                db.session.commit()
+                return new_room.to_dict(only = ('id','topic')), 201
+            except Exception as e:
+                return {'error': str(e)}, 400
+        return {'error': 'No data provided'}, 400
+    def get(self):
+        return [room.to_dict(only = ('id','topic','members','users')) for room in Room.query.all()], 200
 
+class RoomsControllerByID(Resource):
+    def get(self, id):
+        try:
+            return Room.query.filter(Room.id == id).first().to_dict(only = ('id','topic','members','users')), 200
+        except:
+            return {'error': 'Room not found.'}, 400
 
-api.add_resource(CheckAuth, '/check_auth')
+class JoinRoom(Resource):
+    def patch(self, id):
+
+        req = request.get_json()
+        if req:
+            try:
+                room = Room.query.filter(Room.id == id).first()
+                user = User.query.filter(User.id == req['user_id']).first()
+                room.members.append(user)
+                db.session.commit()
+                return room.to_dict(only = ('id','topic','members','users')), 200
+            except Exception as e:
+                return {'error': str(e)}, 400
+        return {'error': 'No data provided'}, 400
+
+        
+
+api.add_resource(CheckAuth, '/check_auth', endpoint='check_auth')
 api.add_resource(Signup, '/signup')
 api.add_resource(Login, '/login')
 api.add_resource(Logout, '/logout')
 api.add_resource(GetUsers, '/users')
 api.add_resource(UsersControllerByID, '/users/<int:id>')
+api.add_resource(RoomsController, '/rooms')
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
