@@ -1,7 +1,7 @@
 import React from 'react'
-import Header from './Header'
-import MessageDisplay from './MessageDisplay'
-import SideBar from './SideBar'
+import Header from '../components/Header'
+import MessageDisplay from '../components/MessageDisplay'
+import SideBar from '../components/SideBar'
 
 import { useSelector } from 'react-redux'
 
@@ -9,8 +9,8 @@ import { useSelector } from 'react-redux'
 function Main() {
   const loggedUser = useSelector((state) => state.user);
   // console.log('loggedUser', loggedUser.user.id)
-  const id = loggedUser.user.id
-  console.log('id', id)
+  // const id = loggedUser.user.id
+  if (loggedUser.isLoggedIn) {console.log('id', loggedUser.user.id)}
 	return (
 		<>
 			<Header />

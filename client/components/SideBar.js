@@ -4,28 +4,29 @@ function SideBar() {
   const [users, setUsers] = useState([]);
   const [rooms, setRooms] = useState([]);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const response = await fetch('/api/users');
-      const data = await response.json();
-      setUsers(data);
-    };
+  // useEffect(() => {
+  //   const fetchUsers = async () => {
+  //     const response = await fetch('http://localhost:5555/users');
+  //     const data = await response.json();
+  //     setUsers(data);
+  //     console.log(users)
+  //   };
 
-    const fetchRooms = async () => {
-      const response = await fetch('/api/rooms');
-      const data = await response.json();
-      setRooms(data);
-    };
+  //   const fetchRooms = async () => {
+  //     const response = await fetch('/api/rooms');
+  //     const data = await response.json();
+  //     setRooms(data);
+  //   };
 
-    fetchUsers();
-    fetchRooms();
-  }, []);
+    // fetchUsers();
+  //   fetchRooms();
+  // }, []);
 
   return (
     <div className="bg-gray-100 text-gray-800 flex flex-col h-full flex-grow">
       <div className="p-4 border-b border-gray-400">
         <h3 className="text-lg font-semibold mb-2">Users</h3>
-        <ul>
+        {/* <ul>
           {users.map((user) => (
             <li key={user.id} className="mb-2">{user.username}</li>
           ))}
@@ -37,7 +38,7 @@ function SideBar() {
           {rooms.map((room) => (
             <li key={room.id} className="mb-2">{room.name}</li>
           ))}
-        </ul>
+        </ul> */}
       </div>
     </div>
   );
