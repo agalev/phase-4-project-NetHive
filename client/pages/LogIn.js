@@ -20,23 +20,25 @@ export default function Login() {
 			email,
       password
 		}
-    // fetch('http://localhost:5555/login', {
-    //   method: 'PATCH',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(user)
-    //     })
-        // work in progress
-        // .then(res => {if (res.status === 200) {
-        //   res.json()
-        //   .then(data => {
-        //     dispatch(login(data))
-        //     router.push('/main')})
-        //   } else {
-        //     console.log('error')}})
-        //   }
-    }
+    fetch('http://localhost:5555/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+        })
+        .then(res => {
+          if (res.ok) {
+            res.json()
+            .then(data => dispatch(login(data)))
+            .then(() => router.push('/Main'))
+          } else {
+            throw new Error('Invalid Credentials')
+          	}
+        	}
+				)
+				.catch(err => console.log(err))
+  	}
 
 	const handleChange = (e) => {
 		if (e.target.name === 'email') setEmail(e.target.value)
@@ -75,7 +77,7 @@ export default function Login() {
 							className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
 							id='password'
 							name='password'
-							type='text'
+							type='password'
 							value={password}
 							onChange={handleChange}
 						/>
