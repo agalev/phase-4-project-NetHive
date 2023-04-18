@@ -6,22 +6,23 @@ import { useSelector } from 'react-redux'
 
 function Main() {
   const loggedUser = useSelector((state) => state.user);
-
-  return (
-    <>
-      <Header />
-      <div className='flex'>
-        <div className='w-1/4'>
-          <SideBar />
-        </div>
-        <div className='w-3/4 flex flex-col'>
-          <div className='flex-grow'>
-            <MessageDisplay />
-          </div>
-        </div>
-      </div>
-    </>
-  )
+  
+  console.log('loggedUser', loggedUser.user.image)
+  // const id = loggedUser.user.id
+  if (loggedUser.isLoggedIn) {console.log('id', loggedUser.user.id)}
+	return (
+		<>
+			<Header loggedUser={loggedUser}/>
+			<div className='flex'>
+				<div className='w-1/4'>
+					<SideBar />
+				</div>
+				<div className='w-3/4'>
+					<MessageDisplay />
+				</div>
+			</div>
+		</>
+	)
 }
 
 export default Main

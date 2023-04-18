@@ -1,10 +1,13 @@
-import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { Formik, Form, Field, ErrorMessage, setFieldValue } from 'formik'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import * as yup from 'yup'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { login } from '../store/userSlice'
+
+const MAX_IMAGE_SIZE = 1024 * 1024;
+const SUPPORTED_IMAGE_FORMATS = ['image/jpeg', 'image/png'];
 
 // Define validation schema
 const validationSchema = yup.object().shape({
@@ -37,7 +40,37 @@ const validationSchema = yup.object().shape({
 });
 
 
-export default function SignUpModal({ submitFunction }) {
+export default function SignUpModal() {
+
+  const dispatch = useDispatch()
+  const router = useRouter()
+
+
+  const handleSubmit = (values) => {
+    console.log(values)
+    const formData = new FormData();
+    formData.append('first_name', values.first_name);
+    formData.append('last_name', values.last_name);
+    formData.append('email', values.email);
+    formData.append('password', values.password);
+    formData.append('image', values.image);
+    
+    fetch('http://localhost:5555/signup', {
+      method: 'POST',
+      body: formData
+    })
+    .then((res) => {
+      if (res.ok) {
+        res
+        .json()
+        .then((data) => dispatch(login(data)))
+        .then(() => router.push('/Main'))
+      } else {
+        throw new Error('Unable to sign up')
+      }
+    })
+    .catch((err) => console.log(err))
+  }
 	return (
 	  <div className='min-h-screen bg-gradient-to-br from-purple-700 to-blue-500 flex items-center justify-center'>
 			<div className='w-full max-w-sm'>
@@ -56,8 +89,8 @@ export default function SignUpModal({ submitFunction }) {
 							handleSubmit(values)
 						}}
 					>
-						{({ isSubmitting }) => (
-							<Form className='space-y-4'>
+						{({ isSubmitting, setFieldValue }) => (
+							<Form className='space-y-4' encType='multipart/form-data'>
 								<div>
 									<label
                     htmlFor="first_name"
@@ -154,15 +187,15 @@ export default function SignUpModal({ submitFunction }) {
                       Profile Picture:
                     </label>
                     <input
-                      id="image"
-                      name="image"
-                      type="file"
-                      accept=".jpg,.jpeg,.png"
-                      onChange={(event) => {
-                        setFieldValue("image", event.currentTarget.files[0]);
-                      }}
-                      className="border border-gray-400 p-2 w-full rounded-lg"
-                    />
+                        id="image"
+                        name="image"
+                        type="file"
+                        accept=".jpg,.jpeg,.png"
+                        onChange={(event) => {
+                          setFieldValue("image", event.currentTarget.files[0], true);
+                        }}
+                        className="border border-gray-400 p-2 w-full rounded-lg"
+                      />      
                     <ErrorMessage
                       name="image"
                       render={(msg) => (
