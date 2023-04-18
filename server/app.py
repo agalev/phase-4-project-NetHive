@@ -21,6 +21,7 @@ class CheckAuth(Resource):
 class Signup(Resource):
     def post(self):
         req = request.get_json()
+        print(req)
         if req:
             try:
                 new_user = User(
@@ -40,9 +41,8 @@ class Signup(Resource):
         return {'error': 'No data provided'}, 400
     
 class Login(Resource):
-    def patch(self):
+    def post(self):
         req = request.get_json()
-        print(req)
         if req:
             try:
                 user = User.query.filter(User.email == req['email']).first()
@@ -57,7 +57,7 @@ class Login(Resource):
         return {'error': 'No data provided'}, 400
     
 class Logout(Resource):
-    def delete(self):
+    def post(self):
             user = User.query.filter(User.id == session['user_id']).first()
             user.is_online = False
             db.session.commit()
