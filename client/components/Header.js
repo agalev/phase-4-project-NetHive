@@ -16,16 +16,16 @@ function Header({ loggedUser }) {
   }
 
   return (
-    <div className="flex items-center justify-between bg-gray-900 text-white py-4 px-6" style={{ height: '80px' }}>
+     <div className="flex items-center justify-between bg-gray-900 text-white py-4 px-6" style={{ height: '80px', zIndex: '10' }}>
       <button onClick={handleClick} className="flex items-center text-gray-300 hover:text-white focus:outline-none">
         <svg className="h-6 w-6 fill-current" viewBox="0 0 24 24">
           <path d="M19 12H5M12 19l-7-7 7-7" />
         </svg>
         <span id='home-button' className="ml-2">Back to Home</span>
       </button>
-      <div className="flex items-center">
-        <h1 className="text-4xl font-large text-blue-600">Net</h1>
-        <h1 className="text-4xl font-large text-purple-600 m1-2">Hive</h1>
+      <div className="flex justify-center">
+  <h1 className="text-4xl font-large bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">Net</h1>
+  <h1 className="text-4xl font-large bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text m1-2">Hive</h1>
       </div>
       <div onClick={handleClick} className="flex items-center w-10 h-10 cursor-pointer hover:opacity-75">
         {loggedUser.user.image ? (

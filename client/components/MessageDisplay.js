@@ -1,8 +1,10 @@
 import React from 'react';
+import MusicPlayer from './MusicPlayer';
 
 function MessageDisplay() {
   return (
     <div className="flex flex-col h-full" style={{ height: 'calc(100vh - 80px)', backgroundColor: '#F7FAFC' }}>
+              <MusicPlayer/>
       <div className="flex-1 overflow-y-scroll px-4 py-2">
         <div className="flex flex-col space-y-4">
           {/* messages will be rendered here */}
@@ -19,5 +21,3 @@ function MessageDisplay() {
 }
 
 export default MessageDisplay;
-
-

@@ -7,6 +7,7 @@ from sqlalchemy import MetaData
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from flask_socketio import SocketIO, emit
 
 load_dotenv()
 
@@ -35,5 +36,7 @@ db.init_app(app)
 bcrypt = Bcrypt(app)
 
 api = Api(app)
+
+socketio = SocketIO(app)
 
 CORS(app)
