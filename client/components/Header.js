@@ -1,8 +1,9 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 
-function Header() {
+function Header({ loggedUser }) {
   const router = useRouter();
+  console.log(loggedUser.user.image)
 
   function handleClick(e){
     console.log(e.target.id)
@@ -27,7 +28,23 @@ function Header() {
         <h1 className="text-4xl font-large text-purple-600 m1-2">Hive</h1>
       </div>
       <div onClick={handleClick} className="flex items-center w-10 h-10 cursor-pointer hover:opacity-75">
-        <img id='profile-button' className="w-full h-full rounded-full object-cover" style={{objectFit: "cover"}} src="https://media.wired.com/photos/5f87340d114b38fa1f8339f9/master/w_1600%2Cc_limit/Ideas_Surprised_Pikachu_HD.jpg" alt="Profile" />
+        {loggedUser.user.image ? (
+          <img
+            id='profile-button'
+            className="w-full h-full rounded-full object-cover"
+            style={{objectFit: "cover"}}
+            src={`/static/images/${loggedUser.user.image}`}
+            alt="Profile"
+          />
+        ) : (
+          <img
+            id='profile-button'
+            className="w-full h-full rounded-full object-cover"
+            style={{objectFit: "cover"}}
+            src="https://media.wired.com/photos/5f87340d114b38fa1f8339f9/master/w_1600%2Cc_limit/Ideas_Surprised_Pikachu_HD.jpg"
+            alt="Default Profile"
+          />
+        )}
       </div>
     </div>
   );

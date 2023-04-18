@@ -8,12 +8,12 @@ import { useSelector } from 'react-redux'
 
 function Main() {
   const loggedUser = useSelector((state) => state.user);
-  // console.log('loggedUser', loggedUser.user.id)
+  console.log('loggedUser', loggedUser.user.image)
   // const id = loggedUser.user.id
   if (loggedUser.isLoggedIn) {console.log('id', loggedUser.user.id)}
 	return (
 		<>
-			<Header />
+			<Header loggedUser={loggedUser}/>
 			<div className='flex'>
 				<div className='w-1/4'>
 					<SideBar />
