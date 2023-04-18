@@ -1,6 +1,8 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Link from "next/link";
 import * as yup from "yup";
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 // Define validation schema
 const validationSchema = yup.object().shape({
@@ -23,7 +25,7 @@ const validationSchema = yup.object().shape({
 
 export default function SignUpModal({ submitFunction }) {
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div className='min-h-screen bg-gradient-to-br from-purple-700 to-blue-500 flex items-center justify-center'>
       <div className="w-full max-w-sm">
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h2 className="text-xl font-bold mb-4">Sign Up</h2>
@@ -40,7 +42,7 @@ export default function SignUpModal({ submitFunction }) {
               submitFunction(values);
             }}
           >
-            {({ isSubmitting }) => (
+            {({ isSubmitting, setFieldValue }) => (
               <Form className="space-y-4">
                 <div>
                   <label
@@ -98,75 +100,83 @@ export default function SignUpModal({ submitFunction }) {
                     name="email"
                     type="email"
                     className="border border-gray-400 p-2 w-full rounded-lg"
-                  />
-                  <ErrorMessage
-                    name="email"
-                    render={(msg) => (
-                      <div className="text-red-500">
-                        <div>{msg}</div>
-                      </div>
-                    )}
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="password"
-                    className="block text-gray-700 font-semibold mb-2"
-                  >
-                    Password:
-                  </label>
-                  <Field
-                    id="password"
-                    name="password"
-                    type="password"
-                    className="border border-gray-400 p-2 w-full rounded-lg"
-                  />
-                  <ErrorMessage
-                    name="password"
-                    render={(msg) => (
-                      <div className="text-red-500">
-                        <div>{msg}</div>
-                      </div>
-                    )}
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="image"
-                    className="block text-gray-700 font-semibold mb-2"
-                  >
-                    Profile Image URL (optional):
-                  </label>
-                  <Field
+                    />
+                    <ErrorMessage
+                      name="email"
+                      render={(msg) => (
+                        <div className="text-red-500">
+                          <div>{msg}</div>
+                        </div>
+                      )}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="password"
+                      className="block text-gray-700 font-semibold mb-2"
+                    >
+                      Password:
+                    </label>
+                    <Field
+                      id="password"
+                      name="password"
+                      type="password"
+                      className="border border-gray-400 p-2 w-full rounded-lg"
+                    />
+                    <ErrorMessage
+                      name="password"
+                      render={(msg) => (
+                        <div className="text-red-500">
+                          <div>{msg}</div>
+                        </div>
+                      )}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="image"
+                      className="block text-gray-700 font-semibold mb-2"
+                    >
+                      Profile Picture:
+                    </label>
+                    <input
                     id="image"
                     name="image"
-                    type="text"
+                    type="file"
+                    accept=".jpg,.jpeg,.png"
+                    onChange={(event) => {
+                      setFieldValue("image", event.currentTarget.files[0]);
+                    }}
                     className="border border-gray-400 p-2 w-full rounded-lg"
                   />
-                  <ErrorMessage
-                    name="image"
-                    render={(msg) => (
-                      <div className="text-red-500">
-                        <div>{msg}</div>
-                      </div>
-                    )}
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                >
-                  {isSubmitting ? "Signing up..." : "Sign Up"}
-                </button>
-              </Form>
-            )}
-          </Formik>
-          <p className="text-gray-700 mt-4">
-            Already have an account? <Link href="/login">Log in</Link>
-          </p>
+                    <ErrorMessage
+                      name="image"
+                      render={(msg) => (
+                        <div className="text-red-500">
+                          <div>{msg}</div>
+                        </div>
+                      )}
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+                  >
+                    Sign Up
+                  </button>
+                  <div className="text-center mt-4">
+                    Already have an account?{" "}
+                    <Link href="http://localhost:3000/LogIn">
+                    Log in
+                  </Link>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </div>
         </div>
       </div>
-    </div>
-  );
-}
+      );
+    }
+
