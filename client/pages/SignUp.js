@@ -1,8 +1,10 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import Link from "next/link";
-import * as yup from "yup";
-import { useEffect } from 'react'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
+import * as yup from 'yup'
+
+import { useSelector, useDispatch } from 'react-redux'
+import { login } from '../store/userSlice'
 
 // Define validation schema
 const validationSchema = yup.object().shape({
@@ -20,32 +22,44 @@ const validationSchema = yup.object().shape({
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
       "Password must contain at least one uppercase letter, one lowercase letter, and one digit"
     ),
-  image: yup.string(),
+  image: yup
+    .mixed()
+    .test(
+      "fileSize",
+      "File size too large",
+      (value) => !value || (value && value.size <= MAX_IMAGE_SIZE)
+    )
+    .test(
+      "fileType",
+      "Unsupported file format",
+      (value) => !value || (value && SUPPORTED_IMAGE_FORMATS.includes(value.type))
+    ),
 });
 
+
 export default function SignUpModal({ submitFunction }) {
-  return (
-    <div className='min-h-screen bg-gradient-to-br from-purple-700 to-blue-500 flex items-center justify-center'>
-      <div className="w-full max-w-sm">
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-xl font-bold mb-4">Sign Up</h2>
-          <Formik
-            initialValues={{
-              firstName: "",
-              lastName: "",
-              email: "",
-              password: "",
-              image: "",
-            }}
-            validationSchema={validationSchema}
-            onSubmit={(values) => {
-              submitFunction(values);
-            }}
-          >
-            {({ isSubmitting, setFieldValue }) => (
-              <Form className="space-y-4">
-                <div>
-                  <label
+	return (
+	  <div className='min-h-screen bg-gradient-to-br from-purple-700 to-blue-500 flex items-center justify-center'>
+			<div className='w-full max-w-sm'>
+				<div className='bg-white rounded-lg shadow-lg p-6'>
+					<h2 className='text-xl font-bold mb-4'>Sign Up</h2>
+					<Formik
+						initialValues={{
+							first_name: '',
+							last_name: '',
+							email: '',
+							password: '',
+							image: ''
+						}}
+						validationSchema={validationSchema}
+						onSubmit={(values) => {
+							handleSubmit(values)
+						}}
+					>
+						{({ isSubmitting }) => (
+							<Form className='space-y-4'>
+								<div>
+									<label
                     htmlFor="firstName"
                     className="block text-gray-700 font-semibold mb-2"
                   >
@@ -92,7 +106,7 @@ export default function SignUpModal({ submitFunction }) {
                   <label
                     htmlFor="email"
                     className="block text-gray-700 font-semibold mb-2"
-                  >
+                    >
                     Email:
                   </label>
                   <Field
@@ -140,15 +154,15 @@ export default function SignUpModal({ submitFunction }) {
                       Profile Picture:
                     </label>
                     <input
-                    id="image"
-                    name="image"
-                    type="file"
-                    accept=".jpg,.jpeg,.png"
-                    onChange={(event) => {
-                      setFieldValue("image", event.currentTarget.files[0]);
-                    }}
-                    className="border border-gray-400 p-2 w-full rounded-lg"
-                  />
+                      id="image"
+                      name="image"
+                      type="file"
+                      accept=".jpg,.jpeg,.png"
+                      onChange={(event) => {
+                        setFieldValue("image", event.currentTarget.files[0]);
+                      }}
+                      className="border border-gray-400 p-2 w-full rounded-lg"
+                    />
                     <ErrorMessage
                       name="image"
                       render={(msg) => (
@@ -167,7 +181,7 @@ export default function SignUpModal({ submitFunction }) {
                   </button>
                   <div className="text-center mt-4">
                     Already have an account?{" "}
-                    <Link href="http://localhost:3000/LogIn">
+                    <Link href="/login">
                     Log in
                   </Link>
                   </div>
@@ -179,4 +193,3 @@ export default function SignUpModal({ submitFunction }) {
       </div>
       );
     }
-
