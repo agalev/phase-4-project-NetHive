@@ -8,8 +8,8 @@ import { login } from '../store/userSlice'
 
 // Define validation schema
 const validationSchema = yup.object().shape({
-  firstName: yup.string().required("First name is required"),
-  lastName: yup.string().required("Last name is required"),
+  first_name: yup.string().required("First name is required"),
+  last_name: yup.string().required("Last name is required"),
   email: yup
     .string()
     .email("Invalid email address")
@@ -60,19 +60,19 @@ export default function SignUpModal({ submitFunction }) {
 							<Form className='space-y-4'>
 								<div>
 									<label
-                    htmlFor="firstName"
+                    htmlFor="first_name"
                     className="block text-gray-700 font-semibold mb-2"
                   >
                     First Name:
                   </label>
                   <Field
-                    id="firstName"
-                    name="firstName"
+                    id="first_name"
+                    name="first_name"
                     type="text"
                     className="border border-gray-400 p-2 w-full rounded-lg"
                   />
                   <ErrorMessage
-                    name="firstName"
+                    name="first_name"
                     render={(msg) => (
                       <div className="text-red-500">
                         <div>{msg}</div>
@@ -82,19 +82,19 @@ export default function SignUpModal({ submitFunction }) {
                 </div>
                 <div>
                   <label
-                    htmlFor="lastName"
+                    htmlFor="last_ame"
                     className="block text-gray-700 font-semibold mb-2"
                   >
                     Last Name:
                   </label>
                   <Field
-                    id="lastName"
-                    name="lastName"
+                    id="last_name"
+                    name="last_name"
                     type="text"
                     className="border border-gray-400 p-2 w-full rounded-lg"
                   />
                   <ErrorMessage
-                    name="lastName"
+                    name="last_name"
                     render={(msg) => (
                       <div className="text-red-500">
                         <div>{msg}</div>
