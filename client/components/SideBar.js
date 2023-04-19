@@ -1,26 +1,9 @@
 import React, { useState, useEffect } from 'react'
+import UserPill from './user_pill'
 
 function SideBar() {
 	const [users, setUsers] = useState([])
 	const [rooms, setRooms] = useState([])
-
-	// useEffect(() => {
-	//   const fetchUsers = async () => {
-	//     const response = await fetch('http://localhost:5555/users');
-	//     const data = await response.json();
-	//     setUsers(data);
-	//     console.log(users)
-	//   };
-
-	//   const fetchRooms = async () => {
-	//     const response = await fetch('/api/rooms');
-	//     const data = await response.json();
-	//     setRooms(data);
-	//   };
-
-	//   fetchUsers();
-	//   fetchRooms();
-	// }, []);
 
 	useEffect(() => {
 		fetch('/users')
@@ -39,14 +22,15 @@ function SideBar() {
 		<div className='bg-gray-100 text-gray-800 flex flex-col h-full flex-grow'>
 			<div className='p-4 border-b border-gray-400'>
 				<h3 className='text-lg font-semibold mb-2'>Users</h3>
-				<ul>
+				<section>
 					{users &&
 						users.map((user) => (
-							<li key={user.id}>
-								{user.first_name} {user.last_name}
-							</li>
+							// <li key={user.id}>
+							// 	{user.first_name} {user.last_name}
+							// </li>
+							<UserPill key={user.id} {...user} />
 						))}
-				</ul>
+				</section>
         <h3 className='text-lg font-semibold my-2'>Rooms</h3>
         <ul>
           {rooms &&
