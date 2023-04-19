@@ -34,12 +34,13 @@ function Header() {
         <svg className="h-6 w-6 fill-current" viewBox="0 0 24 24">
           <path d="M19 12H5M12 19l-7-7 7-7" />
         </svg>
-        <span id='home-button' className="ml-2">Back to Home</span>
+        <span id='home-button' className="ml-2">Back</span>
       </Link>
-      <div className="flex items-center">
-        <h1 className="text-4xl font-large bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">Net</h1>
-        <h1 className="text-4xl font-large bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text m1-2">Hive</h1>
-      </div>
+      <div className="flex items-center pr-6">
+  <h1 className="text-4xl font-large bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text ">Net</h1>
+  <h1 className="text-4xl font-large bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text ">Hive</h1>
+</div>
+
       <div className="flex items-center w-10 h-10 cursor-pointer hover:opacity-75">
         {loggedUser.user.image ? (
           <Link href="/ProfilePage">
