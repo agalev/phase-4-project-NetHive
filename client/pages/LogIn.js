@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { login } from '../store/userSlice'
-import { setLoggedUserImage, setInitalImage } from '../store/userSlice';
+import { setLoggedUserImage, setInitalImage } from '../store/userSlice'
 
 export default function Login() {
 	const dispatch = useDispatch()
@@ -19,52 +19,39 @@ export default function Login() {
 		e.preventDefault()
 		const user = {
 			email,
-      password
+			password
 		}
-    fetch('/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(user)
-        })
-        .then(res => {
-          if (res.ok) {
-            res.json()
-            .then(data => {
-				dispatch(login(data))
-				// console.log(data)
-				dispatch(setInitalImage(data.image))
+		fetch('/login', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(user)
+		})
+			.then((res) => {
+				if (res.ok) {
+					res
+						.json()
+						.then((data) => {
+							dispatch(login(data))
+							// console.log(data)
+							dispatch(setInitalImage(data.image))
+						})
+						.then(() => router.push('/Main'))
+				} else {
+					throw new Error('Invalid Credentials')
+				}
 			})
-			.then(fetch('/check_auth')
-				.then((response) => response.json())
-				.then((data) => {
-					console.log(data)}))
-            .then(() => router.push('/Main'))
-          } else {
-            throw new Error('Invalid Credentials')
-          	}
-        	}
-				)
-				.catch(err => console.log(err))
-  	}
+			.catch((err) => console.log(err))
+	}
 
 	const handleChange = (e) => {
 		if (e.target.name === 'email') setEmail(e.target.value)
 		else setPassword(e.target.value)
 	}
 
-	// check auth / session / cookie
-useEffect(() => {
-fetch('/check_auth')
-	.then((response) => response.json())
-	.then((data) => {
-		console.log(data)
-	})
-
-},[])
 	return (
-	  <div className='min-h-screen bg-gradient-to-br from-purple-700 to-blue-500 flex items-center justify-center'>
+		<div className='min-h-screen bg-gradient-to-br from-purple-700 to-blue-500 flex items-center justify-center'>
 			<div className='bg-white p-10 rounded-lg shadow-md'>
 				<h2 className='text-3xl font-bold text-gray-800 mb-8'>Log in</h2>
 				<form onSubmit={handleSubmit}>

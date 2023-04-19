@@ -206,9 +206,9 @@ class ConversationController(Resource):
         return {'error': 'No data provided'}, 400
 
 class QueryMessages(Resource):
-    def get(self):
+    def get(self, id):
         try:
-            return [conversation.to_dict() for conversation in Conversation.query.filter(or_(Conversation.sender_id == session['user_id'], Conversation.receiver_id == session['user_id'])).all()], 200
+            return [conversation.to_dict() for conversation in Conversation.query.filter(Conversation.sender_id == session['user_id'], Conversation.receiver_id == id).all()], 200
         except Exception as e:
             return {'error': str(e)}, 400
     
@@ -221,7 +221,7 @@ api.add_resource(UsersControllerByID, '/users/<int:id>')
 api.add_resource(RoomsController, '/rooms')
 api.add_resource(RoomsControllerByID, '/rooms/<int:id>')
 api.add_resource(ConversationController, '/conversations')
-api.add_resource(QueryMessages, '/messages')
+api.add_resource(QueryMessages, '/messages/<int:id>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
