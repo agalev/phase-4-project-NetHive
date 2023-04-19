@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { login } from '../store/userSlice'
+import { setLoggedUserImage, setInitalImage } from '../store/userSlice';
 
 export default function Login() {
 	const dispatch = useDispatch()
@@ -30,7 +31,11 @@ export default function Login() {
         .then(res => {
           if (res.ok) {
             res.json()
-            .then(data => dispatch(login(data)))
+            .then(data => {
+				dispatch(login(data))
+				console.log(data.image)
+				dispatch(setInitalImage(data.image))
+			})
             .then(() => router.push('/Main'))
           } else {
             throw new Error('Invalid Credentials')
