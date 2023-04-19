@@ -2,6 +2,9 @@
 
 from flask import session, request
 from flask_restful import Resource
+from werkzeug.utils import secure_filename
+import uuid as uuid
+import os
 
 from config import app, api, db
 
@@ -20,25 +23,34 @@ class CheckAuth(Resource):
     
 class Signup(Resource):
     def post(self):
-        req = request.get_json()
+        req = request.form.to_dict()
+        image = request.files.get('image')
         print(req)
+        print(request.files)
         if req:
             try:
+                pic_filename = secure_filename(image.filename)
+                pic_name = str(uuid.uuid1()) + "_" + pic_filename
+                print(pic_name)
+                image.save(os.path.join(app.config['UPLOAD_FOLDER'],pic_name))
+                print('hello')
                 new_user = User(
                     first_name=req['first_name'],
                     last_name=req['last_name'],
                     email=req['email'],
-                    image=req['image'] if 'image' in req else None,
-                    is_online=True
+                    is_online=True,
+                    image=pic_name
                 )
+                print(new_user)
                 new_user.password_hash = req['password']
                 db.session.add(new_user)
                 db.session.commit()
                 session['user_id'] = new_user.id
-                return new_user.to_dict(only = ('id','first_name','last_name','email','image','is_online')), 201
+                return new_user.to_dict(only=('id', 'first_name', 'last_name', 'email', 'image', 'is_online')), 201
             except Exception as e:
                 return {'error': str(e)}, 400
         return {'error': 'No data provided'}, 400
+
     
 class Login(Resource):
     def post(self):
