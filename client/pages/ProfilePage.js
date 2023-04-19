@@ -1,8 +1,12 @@
 import React from 'react';
 import { useRouter } from 'next/router';
+import { useSelector, useDispatch } from 'react-redux'
+import Link from 'next/link';
+
 
 function ProfilePage() {
   const router = useRouter();
+  const loggedUser = useSelector((state) => state.user)
 
   const handleDelete = async () => {
     try {
@@ -17,27 +21,27 @@ function ProfilePage() {
   return (
     <div className="bg-gray-100 min-h-screen">
       <div className="max-w-2xl mx-auto py-8">
-        <a onClick={() => router.back()} className="text-gray-500 hover:text-gray-700 cursor-pointer">
-          Back
-        </a>
+        <Link href='/Main' >
+        <button className="text-gray-500 hover:text-gray-700 cursor-pointer">Back</button>
+        </Link>
         <h2 className="text-2xl font-bold mt-4">Account Details</h2>
         <div className="mt-8 space-y-4">
           <div>
             <label className="font-bold">First Name:</label>
-            <span className="ml-2">John</span>
+            <span className="ml-2">{loggedUser.user.first_name}</span>
           </div>
           <div>
             <label className="font-bold">Last Name:</label>
-            <span className="ml-2">Doe</span>
+            <span className="ml-2">{loggedUser.user.last_name}</span>
           </div>
           <div>
             <label className="font-bold">Email:</label>
-            <span className="ml-2">johndoe@example.com</span>
+            <span className="ml-2">{loggedUser.user.email}</span>
           </div>
           <div>
             <label className="font-bold">Profile Image:</label>
             <img
-              src="https://media.wired.com/photos/5f87340d114b38fa1f8339f9/master/w_1600%2Cc_limit/Ideas_Surprised_Pikachu_HD.jpg"
+              src={loggedUser.user.image}
               alt="Profile Image"
               width={150}
               height={150}
