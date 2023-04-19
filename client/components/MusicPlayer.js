@@ -28,6 +28,8 @@ function MusicPlayer() {
   const [volume, setVolume] = useState(0.5);
   const audioRef = useRef(null);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+  const [skipCount, setSkipCount] = useState(0);
+  
 
   const handlePlayPause = () => {
     const audio = audioRef.current;
@@ -70,40 +72,22 @@ function MusicPlayer() {
     if (isPlaying) {
       audio.play();
     }
+    setSkipCount(skipCount + 1); 
   };
+  
 
   const handleTimeUpdate = () => {
     const audio = audioRef.current;
     const progress = (audio.currentTime / audio.duration) * 100;
   };
 
-  const handlePreviousTrack = () => {
-    const prevIndex =
-      (currentTrackIndex - 1 + audioSources.length) % audioSources.length;
-    setCurrentTrackIndex(prevIndex);
-    const audio = audioRef.current;
-    audio.src = audioSources[prevIndex].src;
-    audio.volume = volume;
-    if (isPlaying) {
-      audio.play();
-    }
-  };
 
   return (
-    <div className="bg-indigo-500 text-yellow-500 px-4 py-2 flex justify-between items-center fixed w-full top-0 z-50">
+    <div className="bg-gradient-to-br from-purple-700 to-blue-500 text-white px-4 py-2 flex justify-between items-center z-50">
       <div className="music-player">
         <audio ref={audioRef} onEnded={handleEnded} onTimeUpdate={handleTimeUpdate} />
         <div className="controls">
           <div className="buttons-container flex items-center space-x-4">
-            <button className="back-button" onClick={handlePreviousTrack}>
-              ⏮
-            </button>
-            <button className="play-pause-button" onClick={handlePlayPause}>
-              {isPlaying ? "II" : "▶"}
-            </button>
-            <button className="next-button" onClick={handleNextTrack}>
-              ⏭
-            </button>
           </div>
         </div>
         <div className="track-info-container flex items-center">
@@ -119,37 +103,19 @@ function MusicPlayer() {
           </div>
         </div>
       </div>
+      <button className="next-button ml-auto" onClick={handleNextTrack}>
+        Vote To Skip ({skipCount})
+        </button>
       <div className="volume-control flex items-center space-x-2">
         <button
           className="volume-down-button"
           onClick={() => setVolume(Math.max(0, volume - 0.1))}
         >
-          🔉
-        </button>
-        <div className="volume-slider-container flex items-center">
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={volume}
-            className="volume-slider h-1 w-16 rounded-full bg-gray-600"
-            onChange={(e) => setVolume(parseFloat(e.target.value))}
-          />
-          <div
-            className="volume-slider-thumb w-3 h-3 rounded-full bg-white"
-            style={{ marginLeft: `${volume * 100}%` }}
-          ></div>
-        </div>
-        <button
-          className="volume-up-button"
-          onClick={() => setVolume(Math.min(1, volume + 0.1))}
-        >
-          🔊
         </button>
       </div>
     </div>
   );
+  
   
   
 }

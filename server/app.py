@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 import uuid as uuid
 import os
 
-from config import app, api, db
+from config import app, api, db, socketio
 
 from models import User, Conversation, Room, RoomUser
 
@@ -162,6 +162,58 @@ class RoomsControllerByID(Resource):
         except Exception as e:
             return {'error': str(e)}, 400
 
+class ConversationController(Resource):
+    def post(self):
+        req = request.get_json()
+        if req:
+            try:
+                new_conversation = Conversation(
+                    sender_id=session['user_id'],
+                    receiver_id=req['receiver_id'] if req['receiver_id'] else None,
+                    message=req['message']
+                )
+                db.session.add(new_conversation)
+                db.session.commit()
+                return new_conversation.to_dict(only = ('id','sender_id','receiver_id','message')), 201
+            except Exception as e:
+                return {'error': str(e)}, 400
+        return {'error': 'No data provided'}, 400
+    def get(self):
+        return [conversation.to_dict(only = ('id','sender_id','receiver_id','message')) for conversation in Conversation.query.all()], 200
+    def patch(self):
+        req = request.get_json()
+        if req:
+            try:
+                conversation = Conversation.query.filter(Conversation.id == req['id']).first()
+                for attr in req:
+                    setattr(conversation, attr, req[attr])
+                db.session.commit()
+                return conversation.to_dict(only = ('id','sender_id','receiver_id','message')), 200
+            except Exception as e:
+                return {'error': str(e)}, 400
+        return {'error': 'No data provided'}, 400
+    def delete(self):
+        req = request.get_json()
+        if req:
+            try:
+                db.session.delete(Conversation.query.filter(Conversation.id == req['id']).first())
+                db.session.commit()
+                return {'message': 'Message deleted'}, 200
+            except Exception as e:
+                return {'error': str(e)}, 400
+        return {'error': 'No data provided'}, 400
+
+class QueryMessages(Resource):
+    def get(self):
+        try:
+            return [conversation.to_dict(only = ('id','sender_id','receiver_id','message')) for conversation in Conversation.query.filter(or_(Conversation.sender_id == session['user_id'], Conversation.receiver_id == session['user_id'])).all()], 200
+        except Exception as e:
+            return {'error': str(e)}, 400
+    
+
+        
+    
+
 api.add_resource(CheckAuth, '/check_auth')
 api.add_resource(Signup, '/signup')
 api.add_resource(Login, '/login')
@@ -170,6 +222,8 @@ api.add_resource(GetUsers, '/users')
 api.add_resource(UsersControllerByID, '/users/<int:id>')
 api.add_resource(RoomsController, '/rooms')
 api.add_resource(RoomsControllerByID, '/rooms/<int:id>')
+api.add_resource(ConversationController, '/conversations')
+api.add_resource(QueryMessages, '/messages')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
