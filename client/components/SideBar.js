@@ -36,22 +36,22 @@ function SideBar() {
 	}, [])
 
 	return (
-		<div className='bg-gray-100 text-gray-800 flex flex-col h-full flex-grow'>
+		<div class="bg-gradient-to-b from-my-purple to-my-blue text-gray-900 flex flex-col h-full flex-grow border-r-2 border-black">
 			<div className='p-4 border-b border-gray-400'>
-				<h3 className='text-lg font-semibold mb-2'>Users</h3>
+				<h3 className='text-lg font-semibold mb-2 text-white'>Users</h3>
 				<ul>
 					{users &&
 						users.map((user) => (
-							<li key={user.id}>
+							<li className='text-gray-400 hover:bg-gray-900 hover:text-white cursor-pointer' key={user.id}>
 								{user.first_name} {user.last_name}
 							</li>
 						))}
 				</ul>
-        <h3 className='text-lg font-semibold my-2'>Rooms</h3>
+        <h3 className='text-lg font-semibold my-2 text-white'>Rooms</h3>
         <ul>
           {rooms &&
             rooms.map((room) => (
-              <li key={room.id}>
+              <li className='text-gray-400 hover:bg-gray-900 hover:text-white cursor-pointer' key={room.id}>
                 {room.topic}
               </li>
             ))}

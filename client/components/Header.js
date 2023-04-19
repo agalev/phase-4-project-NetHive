@@ -26,15 +26,30 @@ function Header() {
     }
   }, []);
 
+  function handleLogOut(){
+    fetch('/logout', {
+      method: 'POST',
+      credentials: 'include'
+    })
+      .then(response => {
+        if (response.ok) {
+          console.log('Logged out successfully');
+        } else {
+          console.log('Logout failed');
+        }
+      })
+      .catch(error => console.error(error));
+  }
+
   // console.log(loggedUser)
 
   return (
     <div className="flex items-center justify-between bg-gray-900 text-white py-4 px-6" style={{ height: '80px' }}>
-      <Link href='/' className="flex items-center text-gray-300 hover:text-white focus:outline-none">
+      <Link onClick={handleLogOut} href='/' className="flex items-center text-gray-300 hover:text-white focus:outline-none">
         <svg className="h-6 w-6 fill-current" viewBox="0 0 24 24">
           <path d="M19 12H5M12 19l-7-7 7-7" />
         </svg>
-        <span id='home-button' className="ml-2">Back</span>
+        <span id='home-button' className="ml-2">Log Out</span>
       </Link>
       <div className="flex items-center pr-6">
   <h1 className="text-4xl font-large bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text ">Net</h1>
