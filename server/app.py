@@ -5,6 +5,7 @@ from flask_restful import Resource
 from werkzeug.utils import secure_filename
 import uuid as uuid
 import os
+from sqlalchemy import or_
 
 from config import app, api, db, socketio
 
