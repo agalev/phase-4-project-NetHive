@@ -28,6 +28,9 @@ export const userSlice = createSlice({
     setLoggedUserEmail: (state, action) => {
       state.user = { ...state.user, email: action.payload };
     },
+    setDisplayMessages: (state, action) => {
+      state.user = { ...state.user, displayMessages: action.payload };
+    }
   }
 });
 
