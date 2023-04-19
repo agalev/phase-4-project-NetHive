@@ -169,17 +169,18 @@ class ConversationController(Resource):
             try:
                 new_conversation = Conversation(
                     sender_id=session['user_id'],
-                    receiver_id=req['receiver_id'] if req['receiver_id'] else None,
+                    receiver_id=req['receiver_id'] if 'receiver_id' in req else None,
+                    room_id=req['room_id'] if 'room_id' in req else None,
                     message=req['message']
                 )
                 db.session.add(new_conversation)
                 db.session.commit()
-                return new_conversation.to_dict(only = ('id','sender_id','receiver_id','message')), 201
+                return new_conversation.to_dict(), 201
             except Exception as e:
                 return {'error': str(e)}, 400
         return {'error': 'No data provided'}, 400
     def get(self):
-        return [conversation.to_dict(only = ('id','sender_id','receiver_id','message')) for conversation in Conversation.query.all()], 200
+        return [conversation.to_dict() for conversation in Conversation.query.all()], 200
     def patch(self):
         req = request.get_json()
         if req:
@@ -188,7 +189,7 @@ class ConversationController(Resource):
                 for attr in req:
                     setattr(conversation, attr, req[attr])
                 db.session.commit()
-                return conversation.to_dict(only = ('id','sender_id','receiver_id','message')), 200
+                return conversation.to_dict(), 200
             except Exception as e:
                 return {'error': str(e)}, 400
         return {'error': 'No data provided'}, 400
@@ -206,14 +207,10 @@ class ConversationController(Resource):
 class QueryMessages(Resource):
     def get(self):
         try:
-            return [conversation.to_dict(only = ('id','sender_id','receiver_id','message')) for conversation in Conversation.query.filter(or_(Conversation.sender_id == session['user_id'], Conversation.receiver_id == session['user_id'])).all()], 200
+            return [conversation.to_dict() for conversation in Conversation.query.filter(or_(Conversation.sender_id == session['user_id'], Conversation.receiver_id == session['user_id'])).all()], 200
         except Exception as e:
             return {'error': str(e)}, 400
     
-
-        
-    
-
 api.add_resource(CheckAuth, '/check_auth')
 api.add_resource(Signup, '/signup')
 api.add_resource(Login, '/login')
