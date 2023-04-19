@@ -7,9 +7,9 @@ import { useSelector } from 'react-redux'
 function Main() {
   const loggedUser = useSelector((state) => state.user);
   
-  console.log('loggedUser', loggedUser.user.image)
+  // console.log('loggedUser', loggedUser.user.image)
   // const id = loggedUser.user.id
-  if (loggedUser.isLoggedIn) {console.log('id', loggedUser.user.id)}
+  // if (loggedUser.isLoggedIn) {console.log('id', loggedUser.user.id)}
 	return (
 		<>
 			<Header loggedUser={loggedUser}/>

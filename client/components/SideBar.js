@@ -18,16 +18,36 @@ function SideBar() {
   //     setRooms(data);
   //   };
 
-    // fetchUsers();
+  //   fetchUsers();
   //   fetchRooms();
   // }, []);
+
+  useEffect(() => {
+    fetch('/check_auth')
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      });
+    // fetch('http://localhost:5555/users')
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log(data);
+    //   })
+      // .then(
+      //   fetch('localhost:5555/rooms')
+      //     .then((response) => response.json())
+      //     .then((data) => {
+      //       setRooms(data);
+      //     })
+      // );
+  }, []);
 
   return (
     <div className="bg-gray-100 text-gray-800 flex flex-col h-full flex-grow">
       <div className="p-4 border-b border-gray-400">
         <h3 className="text-lg font-semibold mb-2">Users</h3>
-        {/* <ul>
-          {users.map((user) => (
+        <ul>
+          {/* {users.map((user) => (
             <li key={user.id} className="mb-2">{user.username}</li>
           ))}
         </ul>
@@ -37,8 +57,8 @@ function SideBar() {
         <ul>
           {rooms.map((room) => (
             <li key={room.id} className="mb-2">{room.name}</li>
-          ))}
-        </ul> */}
+          ))} */}
+        </ul>
       </div>
     </div>
   );

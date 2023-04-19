@@ -21,7 +21,7 @@ export default function Login() {
 			email,
       password
 		}
-    fetch('http://localhost:5555/login', {
+    fetch('/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -33,9 +33,13 @@ export default function Login() {
             res.json()
             .then(data => {
 				dispatch(login(data))
-				console.log(data.image)
+				// console.log(data)
 				dispatch(setInitalImage(data.image))
 			})
+			.then(fetch('/check_auth')
+				.then((response) => response.json())
+				.then((data) => {
+					console.log(data)}))
             .then(() => router.push('/Main'))
           } else {
             throw new Error('Invalid Credentials')
@@ -50,6 +54,15 @@ export default function Login() {
 		else setPassword(e.target.value)
 	}
 
+	// check auth / session / cookie
+useEffect(() => {
+fetch('/check_auth')
+	.then((response) => response.json())
+	.then((data) => {
+		console.log(data)
+	})
+
+},[])
 	return (
 	  <div className='min-h-screen bg-gradient-to-br from-purple-700 to-blue-500 flex items-center justify-center'>
 			<div className='bg-white p-10 rounded-lg shadow-md'>
