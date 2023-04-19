@@ -19,9 +19,18 @@ export const userSlice = createSlice({
     setLoggedUserImage: (state, action) => {
       state.user = { ...state.user, image: action.payload };
     },
+    setLoggedUserFirstName: (state, action) => {
+      state.user = { ...state.user, first_name: action.payload };
+    },
+    setLoggedUserLastName: (state, action) => {
+      state.user = { ...state.user, last_name: action.payload };
+    },
+    setLoggedUserEmail: (state, action) => {
+      state.user = { ...state.user, email: action.payload };
+    },
   }
 });
 
-export const { login, logout, setLoggedUserImage, setInitalImage } = userSlice.actions;
+export const { login, logout, setLoggedUserImage, setInitalImage, setLoggedUserEmail, setLoggedUserFirstName, setLoggedUserLastName } = userSlice.actions;
 
 export default userSlice.reducer;
