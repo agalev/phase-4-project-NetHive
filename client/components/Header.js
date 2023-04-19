@@ -10,8 +10,8 @@ function Header() {
   const imagepath = useSelector((state) => state.user.initialimage)
   const dispatch = useDispatch();
   const router = useRouter();
-  console.log(imagepath)
-  console.lo
+  // console.log(imagepath)
+  // console.lo
 
   useEffect(() => {
     if (loggedUser) {
@@ -26,7 +26,7 @@ function Header() {
     }
   }, []);
 
-  console.log(loggedUser)
+  // console.log(loggedUser)
 
   return (
     <div className="flex items-center justify-between bg-gray-900 text-white py-4 px-6" style={{ height: '80px' }}>

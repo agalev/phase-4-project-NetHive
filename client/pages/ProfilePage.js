@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useSelector, useDispatch } from "react-redux";
 import Link from "next/link";
 import Header2 from "../components/Header2";
+import { setLoggedUserFirstName, setInitalImage, setLoggedUserLastName, setLoggedUserEmail } from '../store/userSlice';
 
 function ProfilePage() {
   const router = useRouter();
@@ -10,38 +11,45 @@ function ProfilePage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [firstNameEditMode, setFirstNameEditMode] = useState(false);
   const [lastNameEditMode, setLastNameEditMode] = useState(false);
-  const [firstName, setFirstName] = useState(loggedUser.user.first_name);
-  const [lastName, setLastName] = useState(loggedUser.user.last_name);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState(loggedUser.user.email);
 
   const dispatch = useDispatch();
 
-  const handleSave = async () => {
-    const updatedUser = {
-      first_name: firstName,
-      last_name: lastName,
-    };
-  
-    try {
-      const res = await fetch('/api/user', {
-        method: 'PATCH',
-        body: JSON.stringify(updatedUser),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-  
-      if (!res.ok) {
-        throw new Error('Failed to update user');
+  function handleSave (val, make){
+    let updatedUser
+    if (make == 'first'){
+      updatedUser = {
+        first_name: firstName,
       }
-  
-      const data = await res.json();
-      dispatch({ type: 'UPDATE_USER', payload: data });
-      setFirstNameEditMode(false);
-      setLastNameEditMode(false);
-    } catch (error) {
-      console.error(error);
+    }else if (make == 'last'){
+      updatedUser = {
+        last_name: lastName,
+      }
     }
+    fetch(`/users/${loggedUser.user.id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(updatedUser),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res => {
+      if (res.ok) {
+        res.json()
+        .then(data => {
+          dispatch(setLoggedUserFirstName(data.first_name));
+          dispatch(setLoggedUserLastName(data.last_name));
+          dispatch(setLoggedUserEmail(data.email));
+          dispatch({ type: 'UPDATE_USER', payload: data });
+          setFirstNameEditMode(false);
+          setLastNameEditMode(false);
+        })
+      }
+    });
   };
+  
 
   const handleDelete = async () => {
     try {
@@ -88,12 +96,13 @@ function ProfilePage() {
             <div>
               <input
                 type="text"
+                placeholder={loggedUser.user.first_name}
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 className="mt-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
               />
               <button
-                onClick={handleSave}
+                onClick={()=> {handleSave(firstName, 'first')}}
                 className="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded text-center mt-2"
               >
                 Save
@@ -114,12 +123,13 @@ function ProfilePage() {
             <div>
               <input
                 type="text"
+                placeholder={loggedUser.user.last_name}
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 className="mt-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
               />
               <button
-                onClick={() => setLastNameEditMode(false)}
+                onClick={() => {handleSave(lastName, 'last')}}
                 className="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded text-center mt-2"
               >
                 Save
@@ -148,23 +158,22 @@ function ProfilePage() {
       )}
       {showDeleteModal && (
         <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-md shadow-md p-6 z-50">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">
+          <h2 className="text-xl font-bold text-gray-800 mb-4 text-center">
             Confirm Delete
           </h2>
           <p className="mb-4">
-            Are you sure you want to delete your account? This action cannot be
-            undone.
+            Are you sure you want to delete your account? 
           </p>
           <div className="flex justify-end">
             <button
               onClick={() => setShowDeleteModal(false)}
-              className="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded text-center mr-2"
+              className="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded  mr-2"
             >
               Cancel
             </button>
             <button
               onClick={handleConfirmDelete}
-              className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded text-center"
+              className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
             >
               Delete
             </button>
@@ -172,13 +181,13 @@ function ProfilePage() {
         </div>
       )}
       {/* Back to home link */}
-      <div className="mt-8 text-center">
-  <Link href="/" legacyBehavior>
-    <a className="text-blue-500 hover:text-blue-700">Back to Home</a>
-  </Link>
+      {/* <div className="mt-8 text-center"> */}
+  {/* <Link href="/" legacyBehavior> */}
+    {/* <a className="text-blue-500 hover:text-blue-700">Back to Home</a> */}
+  {/* </Link> */}
 </div>
-    </div>
+    // </div>
   );
-}
+};
 
 export default ProfilePage;
