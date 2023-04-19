@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import * as yup from 'yup'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { login } from '../store/userSlice'
+import { login, setInitalImage } from '../store/userSlice'
 
 const MAX_IMAGE_SIZE = 1024 * 1024;
 const SUPPORTED_IMAGE_FORMATS = ['image/jpeg', 'image/png'];
@@ -63,7 +63,9 @@ export default function SignUpModal() {
       if (res.ok) {
         res
         .json()
-        .then((data) => dispatch(login(data)))
+        .then((data) => {
+          dispatch(login(data));
+          dispatch(setInitalImage(data.image))})
         .then(() => router.push('/Main'))
       } else {
         throw new Error('Unable to sign up')
@@ -214,7 +216,7 @@ export default function SignUpModal() {
                   </button>
                   <div className="text-center mt-4">
                     Already have an account?{" "}
-                    <Link href="/login">
+                    <Link href="/LogIn">
                     Log in
                   </Link>
                   </div>
