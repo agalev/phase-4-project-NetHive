@@ -55,7 +55,7 @@ export default function SignUpModal() {
     formData.append('password', values.password);
     formData.append('image', values.image);
     
-    fetch('http://localhost:5555/signup', {
+    fetch('/signup', {
       method: 'POST',
       body: formData
     })
