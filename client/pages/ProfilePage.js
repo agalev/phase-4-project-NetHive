@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux'
+import Link from 'next/link';
 
 
 function ProfilePage() {
@@ -20,9 +21,9 @@ function ProfilePage() {
   return (
     <div className="bg-gray-100 min-h-screen">
       <div className="max-w-2xl mx-auto py-8">
-        <a onClick={() => router.push('/Main')} className="text-gray-500 hover:text-gray-700 cursor-pointer">
-          Back
-        </a>
+        <Link href='/Main' >
+        <button className="text-gray-500 hover:text-gray-700 cursor-pointer">Back</button>
+        </Link>
         <h2 className="text-2xl font-bold mt-4">Account Details</h2>
         <div className="mt-8 space-y-4">
           <div>
