@@ -5,7 +5,6 @@ from flask_restful import Resource
 from werkzeug.utils import secure_filename
 import uuid as uuid
 import os
-from sqlalchemy import or_
 
 from config import app, api, db, socketio
 
@@ -208,7 +207,11 @@ class ConversationController(Resource):
 class QueryMessages(Resource):
     def get(self, id):
         try:
-            return [conversation.to_dict() for conversation in Conversation.query.filter(Conversation.sender_id == session['user_id'], Conversation.receiver_id == id).all()], 200
+            query = Conversation.query.filter(Conversation.sender_id == session['user_id'], Conversation.receiver_id == id).all()
+            query += Conversation.query.filter(Conversation.sender_id == id, Conversation.receiver_id == session['user_id']).all()
+            query.sort(key=lambda x: x.created_at)
+            return [conversation.to_dict() for conversation in query], 200
+            # return [conversation.to_dict() for conversation in Conversation.query.filter(Conversation.sender_id == session['user_id'], Conversation.receiver_id == id).all()], 200
         except Exception as e:
             return {'error': str(e)}, 400
     
