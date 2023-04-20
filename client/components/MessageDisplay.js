@@ -42,7 +42,6 @@ function MessageDisplay({ handleRoomJoin }) {
     })
     .catch(error => console.error(error))
   }
-  console.log(currentMessages)
 
 	function joinRoom(e) {
 		const roomID = e.target.id
