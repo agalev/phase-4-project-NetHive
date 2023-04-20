@@ -64,7 +64,6 @@ function SideBar({ isLoaded, loggedUsersRooms }) {
 	// console.log(loggedUser.user.rooms)
 
 
-}
 
 return (
 	<div class="bg-gradient-to-b from-my-purple to-my-blue text-gray-900 flex flex-col h-screen border-r-2 border-black" style={{ height: `calc(100vh - 80px)` }}>
@@ -136,5 +135,6 @@ return (
 
 
 )
+			}
 
 export default SideBar
