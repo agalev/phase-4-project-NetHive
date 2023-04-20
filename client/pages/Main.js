@@ -32,7 +32,7 @@ function Main() {
 			.catch(error => console.error(error))
 	}
 
-	console.log(loggedUser.user.rooms)
+	// console.log(loggedUser.user.rooms)
 	
 	useEffect(() => {
 		setIsLoaded(true)

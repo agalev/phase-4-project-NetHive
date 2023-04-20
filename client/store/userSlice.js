@@ -30,7 +30,7 @@ export const userSlice = createSlice({
       state.user = { ...state.user, email: action.payload };
     },
     setDisplayMessages: (state, action) => {
-      state.user = { ...state.user, displayMessages: action.payload };
+      state.displayMessages = action.payload
     },
     setLoggedUserRooms: (state, action) => {
       state.user = { ...state.user, rooms: action.payload}
