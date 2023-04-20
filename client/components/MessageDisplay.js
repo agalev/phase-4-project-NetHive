@@ -99,7 +99,6 @@ function MessageDisplay({ handleRoomJoin }) {
             <div className="rounded-full p-2 m-1 bg-orange-600 text-red-100 w-32 h-32 flex items-center justify-center text-xl font-bold animate-upanddown2 cursor-pointer">#{rooms[39].topic}</div>
             <div className="rounded-full p-2 m-1 bg-pink-600 text-red-100 w-28 h-28 flex items-center justify-center text-xl font-bold animate-upanddown cursor-pointer">#{rooms[40].topic}</div>
             
-
           </div>
         </div>
       </div>

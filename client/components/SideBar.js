@@ -3,6 +3,7 @@ import UserPill from './user_pill'
 import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
 import handleRoomJoin from '../hooks/JoinRoom';
+
 function SideBar({ isLoaded, loggedUsersRooms }) {
     const dispatch = useDispatch()
     const loggedUser = useSelector((state) => state.user)
