@@ -28,8 +28,7 @@ function Header() {
 
   function handleLogOut(){
     fetch('/logout', {
-      method: 'POST',
-      credentials: 'include'
+      method: 'POST'
     })
       .then(response => {
         if (response.ok) {

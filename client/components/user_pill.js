@@ -11,11 +11,10 @@ export default function UserPill(user) {
 	return (
 		<article
 			onClick={() => displayMessages()}
-			className='flex items-center justify-between p-4 border-b border-gray-400'
 		>
-			<span className='text-gray-800 font-semibold'>
-				{user.first_name} {user.last_name}
-			</span>
+			<li class='text-gray-400 hover:bg-gray-900 hover:text-white cursor-pointer list-none' key={user.id}>
+             {user.first_name} {user.last_name}
+           </li>
 		</article>
 	)
 }

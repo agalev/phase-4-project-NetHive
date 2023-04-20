@@ -63,7 +63,7 @@ class Login(Resource):
                     session['user_id'] = user.id
                     user.is_online = True
                     db.session.commit()
-                    return user.to_dict(only = ('id','first_name','last_name','email','image','is_online')), 200
+                    return user.to_dict(only = ('id','first_name','last_name','email','image','is_online', 'rooms')), 200
                 return {'error': 'Invalid credentials'}, 400
             except Exception as e:
                 return {'error': str(e)}, 400
@@ -147,7 +147,7 @@ class RoomsControllerByID(Resource):
                 db.session.add(room)
                 db.session.add(new_room_user)
                 db.session.commit()
-                return {'message': 'Joined room.'}, 200
+                return [user.to_dict(only = ('id', 'rooms'))], 200
         except Exception as e:
             return {'error': str(e)}, 400
     def delete(self, id):
