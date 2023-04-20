@@ -49,6 +49,24 @@ function MessageDisplay({ handleRoomJoin }) {
 		handleRoomJoin(roomID)
 	}
 
+  if (!loggedUser.user.rooms || loggedUser.user.rooms.length == 0) {
+    return (
+      <div className="flex flex-col h-full" style={{ height: 'calc(100vh - 80px)', backgroundColor: '#F7FAFC' }}>
+        <div className="flex-1 overflow-y-scroll px-4 py-2">
+          Get Started Select A Topic:
+          <div className="flex flex-col space-y-4">
+            {rooms &&
+            rooms.map((room) => (
+              <li onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className='text-gray-400 hover:bg-gray-900 hover:text-white cursor-pointer' id={room.id} key={room.id}>
+                #{room.topic}
+              </li>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
 	if (!loggedUser.user.rooms) {
 		return (
 			<div
