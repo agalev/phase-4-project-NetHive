@@ -123,7 +123,7 @@ class RoomsController(Resource):
                 return {'error': str(e)}, 400
         return {'error': 'No data provided'}, 400
     def get(self):
-        return [room.to_dict(only = ('id','topic','members','users')) for room in Room.query.all()], 200
+        return [room.to_dict(only = ('id','topic')) for room in Room.query.all()], 200
 
 class RoomsControllerByID(Resource):
     def get(self, id):
