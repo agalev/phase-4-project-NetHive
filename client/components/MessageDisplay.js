@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import MusicPlayer from './MusicPlayer';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDisplayMessages, setLoggedUserRooms } from '../store/userSlice';
+import handleRoomJoin from '../hooks/JoinRoom';
 
-function MessageDisplay({ handleRoomJoin }) {
+function MessageDisplay() {
   const dispatch = useDispatch();
   const loggedUser = useSelector((state) => state.user);
   const loggedUserMessages = useSelector((state) => state.user.displayMessages);
@@ -18,29 +19,9 @@ function MessageDisplay({ handleRoomJoin }) {
       });
   }, []);
 
-  function joinRoom(e){
-    const roomID = e.target.id;
-    handleRoomJoin(roomID)
-  } 
+  console.log(handleRoomJoin)
 
-  
-
-  // useEffect(() => {
-  //   if (loggedUser) {
-  //     // fetch the image using the dynamic path
-  //     fetch(`/api/getImage?imagePath=${encodeURIComponent(imagepath)}`)
-  //       .then(response => response.blob())
-  //       .then(blob => URL.createObjectURL(blob))
-  //       .then(url => {
-  //         dispatch(setLoggedUserImage(url));
-  //       })
-  //       .catch(error => console.error(error));
-  //   }
-  // }, []);
-
-  console.log(loggedUser.user.rooms);
-
-  if (!loggedUser.user.rooms) {
+  if (!loggedUser.user.rooms || loggedUser.user.rooms.length == 0) {
     return (
       <div className="flex flex-col h-full" style={{ height: 'calc(100vh - 80px)', backgroundColor: '#F7FAFC' }}>
         <div className="flex-1 overflow-y-scroll px-4 py-2">
@@ -48,7 +29,7 @@ function MessageDisplay({ handleRoomJoin }) {
           <div className="flex flex-col space-y-4">
             {rooms &&
             rooms.map((room) => (
-              <li onClick={joinRoom} className='text-gray-400 hover:bg-gray-900 hover:text-white cursor-pointer' id={room.id} key={room.id}>
+              <li onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className='text-gray-400 hover:bg-gray-900 hover:text-white cursor-pointer' id={room.id} key={room.id}>
                 #{room.topic}
               </li>
             ))}
