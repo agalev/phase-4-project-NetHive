@@ -4,7 +4,8 @@ export const userSlice = createSlice({
   name: 'user',
   initialState: {
     user: null,
-    initialimage: null
+    initialimage: null,
+    displayMessages: null
   },
   reducers: {
     login: (state, action) => {
@@ -30,10 +31,13 @@ export const userSlice = createSlice({
     },
     setDisplayMessages: (state, action) => {
       state.user = { ...state.user, displayMessages: action.payload };
+    },
+    setLoggedUserRooms: (state, action) => {
+      state.user = { ...state.user, rooms: action.payload}
     }
   }
 });
 
-export const { login, logout, setLoggedUserImage, setInitalImage, setLoggedUserEmail, setLoggedUserFirstName, setLoggedUserLastName } = userSlice.actions;
+export const { login, logout, setLoggedUserImage, setInitalImage, setLoggedUserEmail, setLoggedUserFirstName, setLoggedUserLastName, setDisplayMessages, setLoggedUserRooms } = userSlice.actions;
 
 export default userSlice.reducer;
