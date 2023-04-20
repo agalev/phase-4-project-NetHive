@@ -55,7 +55,7 @@ export default function SignUpModal() {
     formData.append('password', values.password);
     formData.append('image', values.image);
     
-    fetch('http://localhost:5555/signup', {
+    fetch('/signup', {
       method: 'POST',
       body: formData
     })
@@ -182,26 +182,23 @@ export default function SignUpModal() {
                     />
                   </div>
                   <div>
-                    <label
-                      htmlFor="image"
-                      className="block text-gray-700 font-semibold mb-2"
-                    >
+                    <label htmlFor="image" className="block text-gray-700 font-semibold mb-2">
                       Profile Picture:
                     </label>
                     <input
-                        id="image"
-                        name="image"
-                        type="file"
-                        accept=".jpg,.jpeg,.png"
-                        onChange={(event) => {
-                          setFieldValue("image", event.currentTarget.files[0], true);
-                        }}
-                        className="border border-gray-400 p-2 w-full rounded-lg"
-                      />      
+                      id="image"
+                      name="image"
+                      type="file"
+                      accept=".jpg,.jpeg,.png"
+                      onChange={(event) => {
+                        setFieldValue("image", event.currentTarget.files[0], true);
+                      }}
+                      className="border border-gray-400 p-2 w-full rounded-lg"
+                    />
                     <ErrorMessage
                       name="image"
                       render={(msg) => (
-                        <div className="text-red-500">
+                        <div className="text-red-500 mt-2">
                           <div>{msg}</div>
                         </div>
                       )}

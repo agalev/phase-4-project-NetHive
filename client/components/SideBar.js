@@ -1,69 +1,94 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
+import UserPill from './user_pill'
+import { useDispatch, useSelector } from 'react-redux';
 
-function SideBar() {
-  const [users, setUsers] = useState([]);
-  const [rooms, setRooms] = useState([]);
 
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     const response = await fetch('http://localhost:5555/users');
-  //     const data = await response.json();
-  //     setUsers(data);
-  //     console.log(users)
-  //   };
 
-  //   const fetchRooms = async () => {
-  //     const response = await fetch('/api/rooms');
-  //     const data = await response.json();
-  //     setRooms(data);
-  //   };
+function SideBar({ isLoaded, loggedUsersRooms }) {
+	const loggedUser = useSelector((state) => state.user)
+	const [users, setUsers] = useState([])
+	const [rooms, setRooms] = useState([])
 
-  //   fetchUsers();
-  //   fetchRooms();
-  // }, []);
+	console.log(loggedUser.user.rooms)
 
-  useEffect(() => {
-    fetch('/check_auth')
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-      });
-    // fetch('http://localhost:5555/users')
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log(data);
-    //   })
-      // .then(
-      //   fetch('localhost:5555/rooms')
-      //     .then((response) => response.json())
-      //     .then((data) => {
-      //       setRooms(data);
-      //     })
-      // );
-  }, []);
+	useEffect(() => {
+		fetch('/users')
+			.then((response) => response.json())
+			.then((data) => {
+				setUsers(data)
+			})
+		fetch('/rooms')
+			.then((response) => response.json())
+			.then((data) => {
+				setRooms(data)
+			})
+	}, [])
 
-  return (
-    <div className="bg-gray-100 text-gray-800 flex flex-col h-full flex-grow">
-      <div className="p-4 border-b border-gray-400">
-        <h3 className="text-lg font-semibold mb-2">Users</h3>
-        <ul>
-          {/* {users.map((user) => (
-            <li key={user.id} className="mb-2">{user.username}</li>
-          ))}
-        </ul>
-      </div>
-      <div className="p-4">
-        <h3 className="text-lg font-semibold mb-2">Rooms</h3>
-        <ul>
-          {rooms.map((room) => (
-            <li key={room.id} className="mb-2">{room.name}</li>
-          ))} */}
-        </ul>
-      </div>
-    </div>
-  );
+	if(!loggedUser.user.rooms){
+return (
+	<div class="bg-gradient-to-b from-my-purple to-my-blue text-gray-900 flex flex-col h-screen border-r-2 border-black" style={{height: `calc(100vh - 80px)`}}>
+  <div class='p-4 border-b-2 border-gray-900 h-1/2 flex-col'>
+    <h3 class='text-lg font-semibold mb-2 text-white'>Rooms</h3>
+	<div className ='h-60 overflow-y-scroll'>
+	<ul>
+		<li>Nothing
+		</li>
+	</ul>
+	</div>
+  </div>
+  <div class="p-4 flex flex-col h-1/2" >
+    <h3 class='text-lg font-semibold mb-2 text-white'>Direct Message</h3>
+	<div className = 'h-60 overflow-y-scroll'>
+    <section>
+      {users &&
+        users.map((user) => (
+          // <li class='text-gray-400 hover:bg-gray-900 hover:text-white cursor-pointer' key={user.id}>
+          //   {user.first_name} {user.last_name}
+          // </li>
+          <UserPill key={user.id} {...user} />
+        ))}
+    </section>
+	</div>
+  </div>
+</div>
 
-  
+
+);
 }
 
-export default SideBar;
+console.log(loggedUser.user.rooms)
+
+return (
+	<div class="bg-gradient-to-b from-my-purple to-my-blue text-gray-900 flex flex-col h-screen border-r-2 border-black" style={{height: `calc(100vh - 80px)`}}>
+  <div class='p-4 border-b-2 border-gray-900 h-1/2 flex-col'>
+    <h3 class='text-lg font-semibold mb-2 text-white'>Rooms</h3>
+	<div className ='h-60 overflow-y-scroll'>
+	<ul>
+	{loggedUser.user.rooms.map((room) => (
+		<li className='text-gray-400 hover:bg-gray-900 hover:text-white cursor-pointer' id={room.id} key={room.id}>
+			#{room.room.topic}
+		</li>
+		))}
+	</ul>
+	</div>
+  </div>
+  <div class="p-4 flex flex-col h-1/2" >
+    <h3 class='text-lg font-semibold mb-2 text-white'>Direct Message</h3>
+	<div className = 'h-60 overflow-y-scroll'>
+    <section>
+      {users &&
+        users.map((user) => (
+          // <li class='text-gray-400 hover:bg-gray-900 hover:text-white cursor-pointer' key={user.id}>
+          //   {user.first_name} {user.last_name}
+          // </li>
+          <UserPill key={user.id} {...user} />
+        ))}
+    </section>
+	</div>
+  </div>
+</div>
+
+)
+}
+
+export default SideBar

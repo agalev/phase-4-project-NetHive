@@ -83,7 +83,7 @@ function MusicPlayer() {
 
 
   return (
-    <div className="bg-gradient-to-br from-purple-700 to-blue-500 text-white px-4 py-2 flex justify-between items-center z-50">
+    <div className="bg-gradient-to-r from-my-secondpurple to-my-blue text-white px-4 py-2 flex justify-between items-center z-50">
       <div className="music-player">
         <audio ref={audioRef} onEnded={handleEnded} onTimeUpdate={handleTimeUpdate} />
         <div className="controls">
@@ -103,7 +103,7 @@ function MusicPlayer() {
           </div>
         </div>
       </div>
-      <button className="next-button ml-auto" onClick={handleNextTrack}>
+      <button className="next-button ml-auto text-lg" onClick={handleNextTrack}>
         Vote To Skip ({skipCount})
         </button>
       <div className="volume-control flex items-center space-x-2">

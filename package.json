@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "framer-motion": "^10.12.4",
+    "react-spring": "^9.7.1"
+  }
+}
