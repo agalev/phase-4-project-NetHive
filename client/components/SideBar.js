@@ -17,6 +17,7 @@ function SideBar() {
     const [searchValue, setSearchValue] = useState('');
     const [usersearchValue, setUserSearchValue] = useState('');
     const [currInterval, setCurrInterval] = useState(null)
+    const [showsearch, setShowSearch] = useState(false)
 
     console.log(value)
 

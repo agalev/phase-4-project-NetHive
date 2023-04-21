@@ -3,7 +3,8 @@ import MusicPlayer from './MusicPlayer'
 import { useDispatch, useSelector } from 'react-redux'
 import { setDisplayMessages, setLoggedUserRooms } from '../store/userSlice'
 import MessageBlob from './message_blob'
-function MessageDisplay({ handleRoomJoin }) {
+import handleRoomJoin from '../hooks/JoinRoom'
+function MessageDisplay() {
 	const dispatch = useDispatch()
 	const loggedUser = useSelector((state) => state.user)
 	const currentMessages = useSelector((state) => state.user.displayMessages)
@@ -20,7 +21,8 @@ function MessageDisplay({ handleRoomJoin }) {
 	function handleNewMessage(e) {
 		setNewMessage(e.target.value)
 	}
-	
+
+
 	function handleSubmit(e) {
 		e.preventDefault()
 		if (currentMessages.conversation_with) {
@@ -111,7 +113,7 @@ function MessageDisplay({ handleRoomJoin }) {
       <div className="flex flex-col h-full bg-gray-100 overscroll-none">
         <div className="flex-1 overflow-y-scroll px-4 py-2">
           <div className="flex flex-wrap justify-center items-start">
-          <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-gray-600 text-gray-100 w-24 h-24 flex items-center justify-center text-xl font-bold animate-upanddown hover: cursor-pointer" id={rooms[0].id}>#{rooms[0].topic}</div>
+          	<div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-gray-600 text-gray-100 w-24 h-24 flex items-center justify-center text-xl font-bold animate-upanddown hover: cursor-pointer" id={rooms[0].id}>#{rooms[0].topic}</div>
             <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-indigo-600 text-indigo-100 w-40 h-40 flex items-center justify-center text-xl font-bold animate-upanddown2 cursor-pointer" id={rooms[1].id}>#{rooms[1].topic}</div>
             <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-pink-600 text-pink-100 w-32 h-32 flex items-center justify-center text-xl font-bold animate-upanddown3 cursor-pointer" id={rooms[2].id}>#{rooms[2].topic}</div>
             <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-purple-600 text-purple-100 w-40 h-40 flex items-center justify-center text-xl font-bold animate-upanddown2 cursor-pointer" id={rooms[3].id}>#{rooms[3].topic}</div>
