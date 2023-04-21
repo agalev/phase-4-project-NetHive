@@ -11,7 +11,7 @@ const Header2 = ({ loggedUser }) => {
               <span id='home-button' className="ml-2">Back</span>
             </Link>
           </div>
-          <div className="flex items-center justify-center pr-16 pl-">
+          <div className="flex items-center justify-center pr-10 pl">
             <h1 className="text-4xl font-large bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">Net</h1>
             <h1 className="text-4xl font-large bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">Hive</h1>
           </div>
