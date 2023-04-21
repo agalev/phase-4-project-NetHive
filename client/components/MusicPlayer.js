@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useSelector } from "react-redux";
 
 const audioSources = [
   {
@@ -29,6 +30,14 @@ function MusicPlayer() {
   const audioRef = useRef(null);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [skipCount, setSkipCount] = useState(0);
+  const theme = useSelector((state) => state.user.userTheme)
+
+  const colorGradients = {
+    blue: 'bg-gradient-to-r from-my-purple to-my-blue',
+    orange: 'bg-gradient-to-r from-my-red to-my-orange',
+    green: 'bg-gradient-to-r from-my-yellow to-my-green'
+    // Add more color gradients as needed
+  };
   
 
   const handlePlayPause = () => {
@@ -83,7 +92,7 @@ function MusicPlayer() {
 
 
   return (
-    <div className="bg-gradient-to-r from-my-secondpurple to-my-blue text-white px-4 py-2 flex justify-between items-center z-50">
+    <div className={`${colorGradients[theme]} text-white px-4 py-2 flex justify-between items-center z-50`}>
       <div className="music-player">
         <audio ref={audioRef} onEnded={handleEnded} onTimeUpdate={handleTimeUpdate} />
         <div className="controls">

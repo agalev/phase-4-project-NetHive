@@ -7,11 +7,20 @@ import handleRoomJoin from '../hooks/JoinRoom';
 function SideBar({ isLoaded, loggedUsersRooms }) {
     const dispatch = useDispatch()
     const loggedUser = useSelector((state) => state.user)
+    const theme = useSelector((state) => state.user.userTheme)
     const [users, setUsers] = useState([])
     const [rooms, setRooms] = useState([])
     const [showsearch, setShowSearch] = useState(false)
     const [searchValue, setSearchValue] = useState('');
-    useEffect(() => {
+
+    const colorGradients = {
+        blue: 'bg-gradient-to-b from-my-purple to-my-blue',
+        orange: 'bg-gradient-to-b from-my-red to-my-orange',
+        green: 'bg-gradient-to-b from-my-yellow to-my-green'
+        // Add more color gradients as needed
+      };
+
+    useEffect(() => { 
         fetch('/users')
             .then((response) => response.json())
             .then((data) => {
@@ -26,15 +35,12 @@ function SideBar({ isLoaded, loggedUsersRooms }) {
     if (!loggedUser.user.rooms) {
         return (
             <div
-                className='bg-gradient-to-b from-my-purple to-my-blue text-gray-900 flex flex-col h-screen border-r-2 border-black'
+                className={`${colorGradients[theme]} text-gray-900 flex flex-col h-screen border-r-2 border-black`}
                 style={{ height: `calc(100vh - 80px)` }}
             >
                 <div className='p-4 border-b-2 border-gray-900 h-1/2 flex-col'>
                     <h3 className='text-lg font-semibold mb-2 text-white'>Rooms</h3>
                     <div className='h-60 overflow-y-scroll'>
-                        <ul>
-                            <li>Nothing</li>
-                        </ul>
                     </div>
                 </div>
                 <div className='p-4 flex flex-col h-1/2'>
@@ -58,7 +64,7 @@ function SideBar({ isLoaded, loggedUsersRooms }) {
     }
     // console.log(loggedUser.user.rooms)
 return (
-    <div class="bg-gradient-to-b from-my-purple to-my-blue text-gray-900 flex flex-col h-screen border-r-2 border-black" style={{ height: `calc(100vh - 80px)` }}>
+    <div className={`${colorGradients[theme]} text-gray-900 flex flex-col h-screen border-r-2 border-black`} style={{ height: `calc(100vh - 80px)` }}>
     <div class="p-4 border-b-2 border-gray-900 h-1/2 flex-col">
       <div class="flex justify-between items-center mb-2">
       <div class="flex flex-1 justify-between items-center mb-2">

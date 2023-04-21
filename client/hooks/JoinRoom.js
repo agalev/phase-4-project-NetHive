@@ -2,11 +2,6 @@
 import { setLoggedUserRooms } from '../store/userSlice';
 
 
-import { useDispatch } from 'react-redux';
-import { setLoggedUserRooms } from '../store/userSlice';
-
-
-
 function handleRoomJoin(roomID, dispatch){
     // const dispatch = useDispatch()
     console.log('hello')
@@ -22,8 +17,5 @@ function handleRoomJoin(roomID, dispatch){
             console.log(data[0].rooms)})
         .catch(error => console.error(error))
 }
-
-
-
 
 export default handleRoomJoin

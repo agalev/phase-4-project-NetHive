@@ -9,11 +9,13 @@ import {
   setInitialImage,
   setLoggedUserLastName,
   setLoggedUserEmail,
+  setLoggedUserTheme
 } from "../store/userSlice";
 
 function ProfilePage() {
   const router = useRouter();
   const loggedUser = useSelector((state) => state.user);
+  const theme = useSelector((state) => state.user.userTheme)
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [firstNameEditMode, setFirstNameEditMode] = useState(false);
   const [lastNameEditMode, setLastNameEditMode] = useState(false);
@@ -23,6 +25,13 @@ function ProfilePage() {
   const [selectedImageFile, setSelectedImageFile] = useState(null);
 
   const dispatch = useDispatch();
+
+  const colorGradients = {
+    blue: 'bg-gradient-to-r from-my-purple to-my-blue',
+    orange: 'bg-gradient-to-r from-my-red to-my-orange',
+    green: 'bg-gradient-to-r from-my-yellow to-my-green'
+    // Add more color gradients as needed
+  };
 
   function handleSave(val, make) {
     let updatedUser;
@@ -81,12 +90,14 @@ function ProfilePage() {
     setSelectedImageFile(file);
   };
 
+  console.log(theme)
+
   const handleImageClick = () => {
     document.getElementById("file-input").click();
   };
 
   return (
-    <div className="bg-gradient-to-br from-purple-700 to-blue-500 min-h-screen ">
+    <div className={`${colorGradients[theme]} min-h-screen `}>
       <Header2 />
       <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-10 mt-36">
         <h2 className="text-3xl font-bold text-gray-800 text-center w-full">
@@ -169,20 +180,35 @@ function ProfilePage() {
             </div>
           ) : null}
           <div>
-            <label className="font-bold ml-9 mr-20 ">Email:</label>
-            <span className="pl-1 ">{loggedUser.user.email}</span>
-          </div>
           <div>
-            <label className="font-bold"></label>
-          </div>
-          <button
-            onClick={() => setShowDeleteModal(true)}
-            className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded text-center w-full"
-          >
-            Delete Account
-          </button>
-        </div>
+      <label className="font-bold ml-9 mr-20 ">Email:</label>
+      <span className="pl-1 ">{loggedUser.user.email}</span>
+    </div>
+    <div className="flex items-center justify-center mt-6">
+      <label className="font-bold mr-6 ">Choose theme:</label>
+      <div className="flex items-center">
+        <button
+          onClick={() => {dispatch(setLoggedUserTheme('blue'))}}
+          className="h-8 w-8 mr-2 rounded-full bg-gradient-to-r from-my-blue to-my-purple focus:outline-none"
+        ></button>
+        <button
+          onClick={() => {dispatch(setLoggedUserTheme('orange'))}}
+          className="h-8 w-8 mr-2 rounded-full bg-gradient-to-r from-my-orange to-my-red focus:outline-none"
+        ></button>
+        <button
+          onClick={() => {dispatch(setLoggedUserTheme('green'))}}
+          className="h-8 w-8 mr-12 rounded-full bg-gradient-to-r from-green-400 to-green-500 focus:outline-none"
+        ></button>
       </div>
+    </div>
+    <button
+      onClick={() => setShowDeleteModal(true)}
+      className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded text-center w-full mt-6"
+    >
+      Delete Account
+    </button>
+    </div>
+    </div>
 
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
