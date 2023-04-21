@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { setDisplayMessages } from '../store/userSlice'
 
-export default function UserPill(user) {
+export default function UserPill({key, user}) {
 	const dispatch = useDispatch()
 	const displayMessages = () => {
 		fetch(`/messages/${user.id}`)

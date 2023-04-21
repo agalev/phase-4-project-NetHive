@@ -33,6 +33,16 @@ function ProfilePage() {
     // Add more color gradients as needed
   };
 
+  const borderOne = {
+    blue: 'border-4 border-gray-900'
+  }
+  const borderTwo = {
+    orange: 'border-4 border-gray-900'
+  }
+  const borderThree = {
+    green: 'border-4 border-gray-900'
+  }
+
   function handleSave(val, make) {
     let updatedUser;
     if (make == "first") {
@@ -189,15 +199,15 @@ function ProfilePage() {
       <div className="flex items-center">
         <button
           onClick={() => {dispatch(setLoggedUserTheme('blue'))}}
-          className="h-8 w-8 mr-2 rounded-full bg-gradient-to-r from-my-blue to-my-purple focus:outline-none"
+          className={`${borderOne[theme]} h-8 w-8 mr-2 rounded-full bg-gradient-to-r from-my-blue to-my-purple focus:outline-none`}
         ></button>
         <button
           onClick={() => {dispatch(setLoggedUserTheme('orange'))}}
-          className="h-8 w-8 mr-2 rounded-full bg-gradient-to-r from-my-orange to-my-red focus:outline-none"
+          className={`${borderTwo[theme]} h-8 w-8 mr-2 rounded-full bg-gradient-to-r from-my-orange to-my-red focus:outline-none`}
         ></button>
         <button
           onClick={() => {dispatch(setLoggedUserTheme('green'))}}
-          className="h-8 w-8 mr-12 rounded-full bg-gradient-to-r from-green-400 to-green-500 focus:outline-none"
+          className={`${borderThree[theme]} h-8 w-8 mr-12 rounded-full bg-gradient-to-r from-green-400 to-green-500 focus:outline-none`}
         ></button>
       </div>
     </div>

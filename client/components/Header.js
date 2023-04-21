@@ -64,7 +64,7 @@ function Header() {
 
 </div>
 
-      <div className="flex items-center w-10 h-10 cursor-pointer hover:opacity-75">
+      <div className="flex items-center w-12 h-12 cursor-pointer hover:opacity-75">
         {loggedUser.user.image ? (
           <Link href="/ProfilePage">
               <img
@@ -73,8 +73,8 @@ function Header() {
                 style={{objectFit: "cover"}}
                 src={loggedUser.user.image}
                 alt="Profile"
-                width={40}
-                height={40}
+                width={50}
+                height={50}
               />
           </Link>
         ) : (
