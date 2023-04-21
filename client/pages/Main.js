@@ -2,6 +2,7 @@ import React from 'react'
 import Header from '../components/Header'
 import MessageDisplay from '../components/MessageDisplay'
 import SideBar from '../components/SideBar'
+
 function Main() {
     return (
         <>
@@ -11,7 +12,7 @@ function Main() {
                     <SideBar/>
                 </div>
                 <div className='w-3/4'>
-                    <MessageDisplay/>
+                    <MessageDisplay />
                 </div>
             </div>
         </>
