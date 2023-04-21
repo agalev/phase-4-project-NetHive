@@ -1,4 +1,4 @@
-/** @type {import('tailwindcss').Config} */
+
 module.exports = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx}',
@@ -8,9 +8,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        'my-orange': '#EA590A',
+        'my-red': '#DC2625',
         'my-blue': '#4875F1',
         'my-purple': '#7D25D0',
-        'my-secondpurple': '#7C27D1',
+        'my-green': '#66A20B',
+        'my-yellow': '#FACC13'
       },
       keyframes: {
         'upanddown': {
@@ -39,4 +42,4 @@ module.exports = {
     },
   },
   plugins: [],
-}
+};

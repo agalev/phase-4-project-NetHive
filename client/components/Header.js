@@ -9,11 +9,19 @@ import Auth from '../hooks/auth';
 function Header() {
   const loggedUser = useSelector((state) => state.user)
   const imagepath = useSelector((state) => state.user.initialimage)
+  const theme = useSelector((state) => state.user.userTheme)
   const dispatch = useDispatch();
   const router = useRouter();
   // console.log(imagepath)
   // console.lo
-  // Auth()
+  const colorGradients = {
+    blue: 'bg-gradient-to-r from-my-blue to-my-purple',
+    orange: 'bg-gradient-to-r from-my-orange to-my-red',
+    green: 'bg-gradient-to-r from-my-green to-my-yellow'
+    // Add more color gradients as needed
+  };
+
+
   useEffect(() => {
     if (loggedUser) {
       // fetch the image using the dynamic path
@@ -52,11 +60,12 @@ function Header() {
         <span id='home-button' className="ml-2">Log Out</span>
       </Link>
       <div className="flex items-center pr-6">
-  <h1 className="text-4xl font-large bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text ">Net</h1>
-  <h1 className="text-4xl font-large bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text ">Hive</h1>
+      <h1 className={`${colorGradients[theme]} text-4xl font-large text-transparent bg-clip-text`}>Net</h1>
+      <h1 className={`${colorGradients[theme]} text-4xl font-large text-transparent bg-clip-text`}>Hive</h1>
+
 </div>
 
-      <div className="flex items-center w-10 h-10 cursor-pointer hover:opacity-75">
+      <div className="flex items-center w-12 h-12 cursor-pointer hover:opacity-75">
         {loggedUser.user.image ? (
           <Link href="/ProfilePage">
               <img
@@ -65,8 +74,8 @@ function Header() {
                 style={{objectFit: "cover"}}
                 src={loggedUser.user.image}
                 alt="Profile"
-                width={40}
-                height={40}
+                width={50}
+                height={50}
               />
           </Link>
         ) : (

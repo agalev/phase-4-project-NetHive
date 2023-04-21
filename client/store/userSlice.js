@@ -5,7 +5,9 @@ export const userSlice = createSlice({
   initialState: {
     user: null,
     initialimage: null,
-    displayMessages: null
+    displayMessages: null,
+    userTheme: 'blue',
+    userSearchValue: '',
   },
   reducers: {
     login: (state, action) => {
@@ -34,10 +36,16 @@ export const userSlice = createSlice({
     },
     setLoggedUserRooms: (state, action) => {
       state.user = { ...state.user, rooms: action.payload}
-    }
+    },
+    setLoggedUserTheme: (state, action) => {
+      state.userTheme = action.payload
+    },
+    setUserSearchValue: (state, action) => {
+      state.userSearchValue = action.payload;
+    },
   }
 });
 
-export const { login, logout, setLoggedUserImage, setInitalImage, setLoggedUserEmail, setLoggedUserFirstName, setLoggedUserLastName, setDisplayMessages, setLoggedUserRooms } = userSlice.actions;
+export const { login, logout, setLoggedUserImage, setInitalImage, setLoggedUserEmail, setLoggedUserFirstName, setLoggedUserLastName, setDisplayMessages, setLoggedUserRooms, setLoggedUserTheme, setUserSearchValue } = userSlice.actions;
 
 export default userSlice.reducer;

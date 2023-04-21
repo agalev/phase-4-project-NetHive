@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+:root {
+    --my-blue: #4875F1;
+    --my-purple: #7D25D0;
+    --my-secondpurple: #7C27D1;
+    --my-orange: #FACC13;
+    --my-red: #DC2625;
+    --my-green: #17A349;
+    --my-yellow: #FBBF24;
+  }
