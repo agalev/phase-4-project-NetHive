@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import UserPill from './user_pill'
-import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
+import { useDispatch, useSelector } from 'react-redux';
 import handleRoomJoin from '../hooks/JoinRoom';
-import { setUserSearchValue } from '../store/userSlice';
+import UserPill from './user_pill'
+import RoomPill from './room_pill'
 
-function SideBar({ isLoaded, loggedUsersRooms }) {
+function SideBar() {
     const dispatch = useDispatch()
     const loggedUser = useSelector((state) => state.user)
     const theme = useSelector((state) => state.user.userTheme)
@@ -16,6 +16,7 @@ function SideBar({ isLoaded, loggedUsersRooms }) {
     const [showusersearch, setShowUserSearch] = useState(false)
     const [searchValue, setSearchValue] = useState('');
     const [usersearchValue, setUserSearchValue] = useState('');
+    const [currInterval, setCurrInterval] = useState(null)
 
     console.log(value)
 
@@ -26,7 +27,7 @@ function SideBar({ isLoaded, loggedUsersRooms }) {
         // Add more color gradients as needed
       };
 
-    useEffect(() => { 
+    useEffect(() => {
         fetch('/users')
             .then((response) => response.json())
             .then((data) => {
@@ -38,6 +39,7 @@ function SideBar({ isLoaded, loggedUsersRooms }) {
                 setRooms(data)
             })
     }, [])
+
     if (!loggedUser.user.rooms) {
         return (
             <div
@@ -57,10 +59,7 @@ function SideBar({ isLoaded, loggedUsersRooms }) {
                         <section>
                             {users &&
                                 users.map((user) => (
-                                    // <li class='text-gray-400 hover:bg-gray-900 hover:text-white cursor-pointer' key={user.id}>
-                                    //   {user.first_name} {user.last_name}
-                                    // </li>
-                                    <UserPill key={user.id} {...user} />
+                                    <UserPill key={user.id} currInterval={currInterval} setCurrInterval={setCurrInterval} user={user} />
                                 ))}
                         </section>
                     </div>
@@ -68,54 +67,55 @@ function SideBar({ isLoaded, loggedUsersRooms }) {
             </div>
         )
     }
-    // console.log(loggedUser.user.rooms)
-    return (
-        <div className={`${colorGradients[theme]} text-gray-900 flex flex-col h-screen border-r-2 border-black`} style={{ height: `calc(100vh - 80px)` }}>
-          <div className="p-4 border-b-2 border-gray-900 h-1/2 flex-col">
-            <div className="flex justify-between items-center mb-2">
-              <div className="flex flex-1 justify-between items-center mb-2">
-                <h3 className="text-lg font-semibold text-white">Rooms</h3>
-                {!showroomsearch && (
-                  <div onClick={() => {setShowRoomSearch(!showroomsearch)}} className="flex justify-end">
-                    <Image
-                      width={30}
-                      height={30}
-                      alt='search'
-                      src="/Magnifying-Glass-Search-PNG-Image.png"
-                      className="hover:cursor-pointer"
-                    />
-                  </div>
-                )}
-              </div>
-              <div className="relative">
-                {showroomsearch && (
-                  <input
-                    autoFocus={true}
-                    onBlur={() => {setShowRoomSearch(!showroomsearch)}}
-                    type="text"
-                    placeholder="Search rooms..."
-                    value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
-                    className="w-full bg-transparent text-white pr-8 placeholder-gray-400 border-b-2 border-gray-900 focus:outline-none focus:border-gray-400"
-                  />
-                )}
-              </div>
+return (
+    <div className={`${colorGradients[theme]} text-gray-900 flex flex-col h-screen border-r-2 border-black`} style={{ height: `calc(100vh - 80px)` }}>
+    <div class="p-4 border-b-2 border-gray-900 h-1/2 flex-col">
+      <div class="flex justify-between items-center mb-2">
+      <div class="flex flex-1 justify-between items-center mb-2">
+            <h3 class="text-lg font-semibold text-white">Rooms</h3>
+            {!showsearch && (
+                <div onClick={()=>{setShowSearch(!showsearch)}} class="flex justify-end">
+                <Image
+                    width={30}
+                    height={30}
+                    alt='search'
+                    src="/Magnifying-Glass-Search-PNG-Image.png"
+                    className="hover:cursor-pointer"
+                />
+                </div>
+            )}
             </div>
-            <div className='h-60 overflow-y-scroll'>
-              <ul>
-                {!showroomsearch && loggedUser.user.rooms.map((room) => (
-                  <li className='text-gray-400 hover:bg-gray-900 hover:text-white cursor-pointer' id={room.id} key={room.id}>
-                    #{room.room.topic}
-                  </li>
-                ))}
-                {showroomsearch && rooms &&
-                  rooms
-                  .filter((room) => room.topic.toLowerCase().includes(searchValue.toLowerCase()))
-                  .map((room) => (
+        <div class="relative">
+        {showsearch && (
+            <input
+                autoFocus={true}
+                onBlur={() => {setShowSearch(!showsearch)}}
+                type="text"
+                placeholder="Search rooms..."
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                className="w-full bg-transparent text-white pr-8 placeholder-gray-400 border-b-2 border-gray-900 focus:outline-none focus:border-gray-400"
+            />
+            )}
+        </div>
+      </div>
+      <div className='h-60 overflow-y-scroll'>
+        <ul>
+          {!showsearch && (loggedUser.user.rooms.map((room) => (
+            // <li className='text-gray-400 hover:bg-gray-900 hover:text-white cursor-pointer' id={room.id} key={room.id}>
+            //   #{room.room.topic}
+              <RoomPill key={room.id} currInterval={currInterval} setCurrInterval={setCurrInterval} room={room} />
+            // </li>
+          )))}
+            {showsearch && rooms &&
+                rooms
+                .filter((room) => room.topic.toLowerCase().includes(searchValue.toLowerCase()))
+                .map((room) => {
+                    return(
                     <li key={room.id} onMouseDown={(e) => handleRoomJoin(e.target.id, dispatch)} className='text-gray-400 hover:bg-gray-900 hover:text-white cursor-pointer' id={room.id} >
                       #{room.topic}
                     </li>
-                  ))
+                  )})
                 }
               </ul>
             </div>
@@ -153,12 +153,12 @@ function SideBar({ isLoaded, loggedUsersRooms }) {
             <div className='h-60 overflow-y-scroll'>
         <section>
         {!showusersearch && users && users.map((user) => (
-            <UserPill key={user.id} user={user} />
+            <UserPill currInterval={currInterval} setCurrInterval={setCurrInterval} key={user.id} user={user} />
         ))}
         {showusersearch && users
             .filter((user) => user.first_name.toLowerCase().includes(usersearchValue.toLowerCase()))
             .map((user) => (
-                <UserPill key={user.id} user={user} />
+                <UserPill currInterval={currInterval} setCurrInterval={setCurrInterval} key={user.id} user={user} />
             ))
             }
         </section>
@@ -167,5 +167,6 @@ function SideBar({ isLoaded, loggedUsersRooms }) {
   </div>
   
 )
-            }
+}
+            
 export default SideBar

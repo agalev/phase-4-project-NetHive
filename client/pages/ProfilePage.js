@@ -76,9 +76,15 @@ function ProfilePage() {
 
   const handleDelete = async () => {
     try {
-      // Replace this with your API call to delete the user
-      console.log("Deleting user...");
-      router.push("/");
+      const response = await fetch(`/users/${loggedUser.user.id}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        console.log("User deleted successfully");
+        router.push("/");
+      } else {
+        console.error("Failed to delete user");
+      }
     } catch (error) {
       console.error(error);
     }

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoggedUserImage } from '../store/userSlice';
+import Auth from '../hooks/auth';
 
 function Header() {
   const loggedUser = useSelector((state) => state.user)

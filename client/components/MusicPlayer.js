@@ -96,24 +96,41 @@ function MusicPlayer() {
       <div className="music-player">
         <audio ref={audioRef} onEnded={handleEnded} onTimeUpdate={handleTimeUpdate} />
         <div className="controls">
+            
           <div className="buttons-container flex items-center space-x-4">
+            
           </div>
+          
         </div>
         <div className="track-info-container flex items-center">
+            
           <div className="track-info-wrapper">
+            
             <div className="track-info">
+                
               <div className="track-title font-bold text-lg">
+                
                 {audioSources[currentTrackIndex].title}
+                
               </div>
+              
               <div className="track-artist text-gray-400">
                 {audioSources[currentTrackIndex].artist}
+                
               </div>
+              
             </div>
+            
           </div>
+          
         </div>
       </div>
       <button className="next-button ml-auto text-lg" onClick={handleNextTrack}>
+        
         Vote To Skip ({skipCount})
+        <button className="play-pause-button" onClick={handlePlayPause}>
+              {isPlaying ? "II" : "▶"}
+            </button>
         </button>
       <div className="volume-control flex items-center space-x-2">
         <button
