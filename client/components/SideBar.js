@@ -10,6 +10,8 @@ function SideBar({ isLoaded, loggedUsersRooms }) {
     const [rooms, setRooms] = useState([])
     const [showsearch, setShowSearch] = useState(false)
     const [searchValue, setSearchValue] = useState('');
+    
+
     useEffect(() => {
         fetch('/users')
             .then((response) => response.json())
