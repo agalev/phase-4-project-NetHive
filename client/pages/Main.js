@@ -12,7 +12,7 @@ function Main() {
                     <SideBar/>
                 </div>
                 <div className='w-3/4'>
-                    <MessageDisplay/>
+                    <MessageDisplay />
                 </div>
             </div>
         </>

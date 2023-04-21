@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import UserPill from './user_pill'
-import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
+import { useDispatch, useSelector } from 'react-redux';
 import handleRoomJoin from '../hooks/JoinRoom';
+import UserPill from './user_pill'
+import RoomPill from './room_pill'
 
-function SideBar({ isLoaded, loggedUsersRooms }) {
+function SideBar() {
     const dispatch = useDispatch()
     const loggedUser = useSelector((state) => state.user)
     const [users, setUsers] = useState([])
     const [rooms, setRooms] = useState([])
     const [showsearch, setShowSearch] = useState(false)
     const [searchValue, setSearchValue] = useState('');
+    const [currInterval, setCurrInterval] = useState(null)
+
     useEffect(() => {
         fetch('/users')
             .then((response) => response.json())
@@ -23,6 +26,7 @@ function SideBar({ isLoaded, loggedUsersRooms }) {
                 setRooms(data)
             })
     }, [])
+
     if (!loggedUser.user.rooms) {
         return (
             <div
@@ -45,10 +49,7 @@ function SideBar({ isLoaded, loggedUsersRooms }) {
                         <section>
                             {users &&
                                 users.map((user) => (
-                                    // <li class='text-gray-400 hover:bg-gray-900 hover:text-white cursor-pointer' key={user.id}>
-                                    //   {user.first_name} {user.last_name}
-                                    // </li>
-                                    <UserPill key={user.id} {...user} />
+                                    <UserPill key={user.id} currInterval={currInterval} setCurrInterval={setCurrInterval} user={user} />
                                 ))}
                         </section>
                     </div>
@@ -56,7 +57,6 @@ function SideBar({ isLoaded, loggedUsersRooms }) {
             </div>
         )
     }
-    // console.log(loggedUser.user.rooms)
 return (
     <div class="bg-gradient-to-b from-my-purple to-my-blue text-gray-900 flex flex-col h-screen border-r-2 border-black" style={{ height: `calc(100vh - 80px)` }}>
     <div class="p-4 border-b-2 border-gray-900 h-1/2 flex-col">
@@ -92,18 +92,21 @@ return (
       <div className='h-60 overflow-y-scroll'>
         <ul>
           {!showsearch && (loggedUser.user.rooms.map((room) => (
-            <li className='text-gray-400 hover:bg-gray-900 hover:text-white cursor-pointer' id={room.id} key={room.id}>
-              #{room.room.topic}
-            </li>
+            // <li className='text-gray-400 hover:bg-gray-900 hover:text-white cursor-pointer' id={room.id} key={room.id}>
+            //   #{room.room.topic}
+              <RoomPill key={room.id} currInterval={currInterval} setCurrInterval={setCurrInterval} room={room} />
+            // </li>
           )))}
             {showsearch && rooms &&
                 rooms
                 .filter((room) => room.topic.toLowerCase().includes(searchValue.toLowerCase()))
-                .map((room) => {return(
+                .map((room) => {
+                    return(
                     <li key={room.id} onMouseDown={(e) => handleRoomJoin(e.target.id, dispatch)} className='text-gray-400 hover:bg-gray-900 hover:text-white cursor-pointer' id={room.id} >
                     #{room.topic}
                     </li>
-                )})
+                )
+            })
             }
         </ul>
       </div>
@@ -114,8 +117,8 @@ return (
         <section>
           {users &&
             users.map((user) => (
-              <UserPill key={user.id} {...user} />
-            ))}
+                <UserPill key={user.id} currInterval={currInterval} setCurrInterval={setCurrInterval} user={user} />
+                ))}
         </section>
       </div>
     </div>
