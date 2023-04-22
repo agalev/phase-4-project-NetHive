@@ -26,7 +26,7 @@ const audioSources = [
 
 function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.5);
+  const [volume, setVolume] = useState(1);
   const audioRef = useRef(null);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [skipCount, setSkipCount] = useState(0);
@@ -125,13 +125,10 @@ function MusicPlayer() {
           
         </div>
       </div>
-      <button className="next-button ml-auto text-lg" onClick={handleNextTrack}>
-        
-        Vote To Skip ({skipCount})
+      <button className="next-button ml-auto text-lg" onClick={handleNextTrack}>Vote To Skip ({skipCount})</button>
         <button className="play-pause-button" onClick={handlePlayPause}>
               {isPlaying ? "II" : "▶"}
             </button>
-        </button>
       <div className="volume-control flex items-center space-x-2">
         <button
           className="volume-down-button"

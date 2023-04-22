@@ -17,6 +17,23 @@ function MessageDisplay() {
 				setRooms(data)
 			})
 	}, [])
+
+		const bubbleStyles = {
+			0: "rounded-full p-2 m-1 bg-gray-600 text-gray-100 xl:w-16 xl:text-xs xl:h-16 w-24 h-24 flex items-center justify-center text-xl font-bold animate-upanddown hover: cursor-pointer",
+			1: "rounded-full p-2 m-1 bg-indigo-600 text-indigo-100 xl:w-32 xl:text-md xl:h-32 w-40 h-40 flex items-center justify-center text-xl font-bold animate-upanddown2 cursor-pointer",
+			2: "rounded-full p-2 m-1 bg-pink-600 text-pink-100 xl:w-24 xl:text-md xl:h-24 w-32 h-32 flex items-center justify-center text-xl font-bold animate-upanddown3 cursor-pointer",
+			3: "rounded-full p-2 m-1 bg-purple-600 text-purple-100 xl:w-28 xl:text-md xl:h-28 w-40 h-40 flex items-center justify-center text-xl font-bold animate-upanddown2 cursor-pointer",
+			4: "rounded-full p-2 m-1 bg-green-600 text-green-100 xl:w-16 xl:text-xs xl:h-16 w-24 h-24 flex items-center justify-center text-xl font-bold animate-upanddown cursor-pointer",
+			5: "rounded-full p-2 m-1 bg-blue-600 text-blue-100 xl:w-28 xl:text-md xl:h-28 w-40 h-40 flex items-center justify-center text-xl font-bold animate-upanddown3 cursor-pointer",
+			6: "rounded-full p-2 m-1 bg-orange-600 text-orange-100 xl:w-20 xl:text-xs xl:h-20 w-32 h-32 flex items-center justify-center text-xl font-bold animate-upanddown cursor-pointer",
+			7: "rounded-full p-2 m-1 bg-yellow-600 text-yellow-100 xl:w-32 xl:text-md xl:h-32 w-40 h-40 flex items-center justify-center text-xl font-bold animate-upanddown3 cursor-pointer",
+			8: "rounded-full p-2 m-1 bg-red-600 text-red-100 xl:w-28 xl:text-sm xl:h-28 w-40 h-40  flex items-center justify-center text-xl font-bold animate-upanddown3 cursor-pointer",
+			9: "rounded-full p-2 m-1 bg-teal-600 text-teal-100 xl:w-16 xl:text-sm xl:h-16 w-24 h-24 flex items-center justify-center text-xl font-bold animate-upanddown3 cursor-pointer",
+			10: "rounded-full p-2 m-1 bg-green-600 text-red-100 xl:w-20 xl:text-md xl:h-20 w-32 h-32 flex items-center justify-center text-xl font-bold animate-upanddown cursor-pointer",
+			11: "rounded-full p-2 m-1 bg-indigo-600 text-red-100 xl:w-32 xl:text-md xl:h-32 w-40 h-40 flex items-center justify-center text-xl font-bold animate-upanddown2 cursor-pointer",
+			12: "rounded-full p-2 m-1 bg-pink-600 text-red-100 xl:w-16 xl:text-xs xl:h-16 w-24 h-24 flex items-center justify-center text-xl font-bold animate-upanddown3 cursor-pointer",
+			13: "rounded-full p-2 m-1 bg-purple-600 text-red-100 xl:w-24 xl:text-md xl:h-24 w-32 h-32 flex items-center justify-center text-xl font-bold animate-upanddown2 cursor-pointer"
+		};
 	
 	function handleNewMessage(e) {
 		setNewMessage(e.target.value)
@@ -76,6 +93,13 @@ function MessageDisplay() {
 	}
 }
 
+const getRoomStyle = (index) => {
+	const styleIndex = index % 10; // get a number between 0 and 9
+	return styleIndex;
+  };
+  
+  let counter = 0;
+
     if (rooms.length === 0) {
       return (
         <div className="flex items-center justify-center h-screen flex-col overscroll-none">
@@ -109,55 +133,25 @@ function MessageDisplay() {
   if (!loggedUser.user.rooms || loggedUser.user.rooms.length === 0) {
     return (
       <>
-      {/* <h1>Welcome New User, Pick A Topic:</h1> */}
-      <div className="flex flex-col h-full bg-gray-100 overscroll-none">
+	<h1 class="text-center text-4xl mt-6 mb-6 font-bold bg-gradient-to-r from-my-blue to-my-purple text-transparent animate-text-reveal bg-clip-text">Welcome {loggedUser.user.first_name}, Pick Your First Room To Join:</h1>
+      <div className="flex flex-col h-full overscroll-none">
         <div className="flex-1 overflow-y-scroll px-4 py-2">
           <div className="flex flex-wrap justify-center items-start">
-          	<div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-gray-600 text-gray-100 w-24 h-24 flex items-center justify-center text-xl font-bold animate-upanddown hover: cursor-pointer" id={rooms[0].id}>#{rooms[0].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-indigo-600 text-indigo-100 w-40 h-40 flex items-center justify-center text-xl font-bold animate-upanddown2 cursor-pointer" id={rooms[1].id}>#{rooms[1].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-pink-600 text-pink-100 w-32 h-32 flex items-center justify-center text-xl font-bold animate-upanddown3 cursor-pointer" id={rooms[2].id}>#{rooms[2].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-purple-600 text-purple-100 w-40 h-40 flex items-center justify-center text-xl font-bold animate-upanddown2 cursor-pointer" id={rooms[3].id}>#{rooms[3].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-green-600 text-green-100 w-24 h-24 flex items-center justify-center text-xl font-bold animate-upanddown cursor-pointer" id={rooms[4].id}>#{rooms[4].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-blue-600 text-blue-100 w-40 h-40 flex items-center justify-center text-xl font-bold animate-upanddown3 cursor-pointer" id={rooms[5].id}>#{rooms[5].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-orange-600 text-orange-100 w-32 h-32 flex items-center justify-center text-xl font-bold animate-upanddown cursor-pointer" id={rooms[6].id}>#{rooms[6].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-yellow-600 text-yellow-100 w-40 h-40 flex items-center justify-center text-xl font-bold animate-upanddown3 cursor-pointer" id={rooms[7].id}>#{rooms[7].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-red-600 text-red-100 w-40 h-40  flex items-center justify-center text-xl font-bold animate-upanddown3 cursor-pointer" id={rooms[8].id}>#{rooms[8].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-teal-600 text-teal-100 w-24 h-24 flex items-center justify-center text-xl font-bold animate-upanddown3 cursor-pointer" id={rooms[9].id}>#{rooms[9].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-green-600 text-red-100 w-32 h-32 flex items-center justify-center text-xl font-bold animate-upanddown cursor-pointer" id={rooms[10].id}>#{rooms[10].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-indigo-600 text-red-100 w-40 h-40 flex items-center justify-center text-xl font-bold animate-upanddown2 cursor-pointer" id={rooms[11].id}>#{rooms[11].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-pink-600 text-red-100 w-24 h-24 flex items-center justify-center text-xl font-bold animate-upanddown3 cursor-pointer" id={rooms[12].id}>#{rooms[12].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-purple-600 text-red-100 w-36 h-36 flex items-center justify-center text-xl font-bold animate-upanddown2 cursor-pointer" id={rooms[13].id}>#{rooms[13].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-green-600 text-red-100 w-32 h-32 flex items-center justify-center text-xl font-bold animate-upanddown cursor-pointer" id={rooms[14].id}>#{rooms[14].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-blue-600 text-red-100 w-24 h-24 flex items-center justify-center text-xl font-bold animate-upanddown3 cursor-pointer" id={rooms[15].id}>#{rooms[15].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-orange-600 text-red-100 w-428 h-28 flex items-center justify-center text-xl font-bold animate-upanddown2 cursor-pointer" id={rooms[16].id}>#{rooms[16].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-yellow-600 text-red-100 w-32 h-32 flex items-center justify-center text-xl font-bold animate-upanddown cursor-pointer" id={rooms[17].id}>#{rooms[17].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-red-600 text-red-100 w-40 h-40 flex items-center justify-center text-xl font-bold animate-upanddown cursor-pointer" id={rooms[18].id}>#{rooms[18].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-gray-600 text-red-100 w-32 h-32 flex items-center justify-center text-xl font-bold animate-upanddown2 cursor-pointer" id={rooms[19].id}>#{rooms[19].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-indigo-600 text-red-100 w-24 h-24 flex items-center justify-center text-xl font-bold animate-upanddown3 cursor-pointer" id={rooms[20].id}>#{rooms[20].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-red-600 text-red-100 w-32 h-32 flex items-center justify-center text-xl font-bold animate-upanddown2 cursor-pointer" id={rooms[21].id}>#{rooms[21].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-purple-600 text-red-100 w-24 h-24 flex items-center justify-center text-xl font-bold animate-upanddown2 cursor-pointer" id={rooms[22].id}>#{rooms[22].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-green-600 text-red-100 w-32 h-32 flex items-center justify-center text-xl font-bold animate-upanddown3 cursor-pointer" id={rooms[23].id}>#{rooms[23].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-blue-600 text-red-100 w-40 h-40 flex items-center justify-center text-xl font-bold animate-upanddown cursor-pointer" id={rooms[24].id}>#{rooms[24].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-pink-600 text-red-100 w-40 h-40 flex items-center justify-center text-xl font-bold animate-upanddown cursor-pointer" id={rooms[25].id}>#{rooms[25].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-red-600 text-red-100 w-24 h-24 flex items-center justify-center text-xl font-bold animate-upanddown3 cursor-pointer" id={rooms[26].id}>#{rooms[26].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-green-600 text-red-100 w-40 h-40 flex items-center justify-center text-xl font-bold animate-upanddown2 cursor-pointer" id={rooms[27].id}>#{rooms[27].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-indigo-600 text-red-100 w-32 h-32 flex items-center justify-center text-xl font-bold animate-upanddown cursor-pointer" id={rooms[28].id}>#{rooms[28].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-pink-600 text-red-100 w-32 h-32 flex items-center justify-center text-xl font-bold animate-upanddown3 cursor-pointer" id={rooms[29].id}>#{rooms[29].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-purple-600 text-red-100 w-40 h-40 flex items-center justify-center text-xl font-bold animate-upanddown cursor-pointer" id={rooms[30].id}>#{rooms[30].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-green-600 text-red-100 w-32 h-32 flex items-center justify-center text-xl font-bold animate-upanddown3 cursor-pointer" id={rooms[31].id}>#{rooms[31].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-red-600 text-red-100 w-32 h-32 flex items-center justify-center text-xl font-bold animate-upanddown2 cursor-pointer" id={rooms[32].id}>#{rooms[32].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-orange-600 text-red-100 w-24 h-24 flex items-center justify-center text-xl font-bold animate-upanddown cursor-pointer" id={rooms[33].id}>#{rooms[33].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-yellow-600 text-red-100 w-24 h-24 flex items-center justify-center text-xl font-bold animate-upanddown3 cursor-pointer" id={rooms[34].id}>#{rooms[34].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-red-600 text-red-100 w-32 h-32 flex items-center justify-center text-xl font-bold animate-upanddown cursor-pointer" id={rooms[35].id}>#{rooms[35].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-gray-600 text-red-100 w-36 h-36 flex items-center justify-center text-xl font-bold animate-upanddown3 cursor-pointer" id={rooms[36].id}>#{rooms[36].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-pink-600 text-red-100 w-32 h-32 flex items-center justify-center text-xl font-bold animate-upanddown cursor-pointer" id={rooms[37].id}>#{rooms[37].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-purple-600 text-red-100 w-24 h-24 flex items-center justify-center text-xl font-bold animate-upanddown2 cursor-pointer" id={rooms[38].id}>#{rooms[38].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-green-600 text-red-100 w-32 h-32 flex items-center justify-center text-xl font-bold animate-upanddown3 cursor-pointer" id={rooms[39].id}>#{rooms[39].topic}</div>
-            <div onClick={(e) => handleRoomJoin(e.target.id, dispatch)} className="rounded-full p-2 m-1 bg-blue-600 text-red-100 w-36 h-36 flex items-center justify-center text-xl font-bold animate-upanddown2 cursor-pointer" id={rooms[40].id}>#{rooms[40].topic}</div>
-  
-
-            
-
+		  {rooms.map((room, index) => {
+				let newIndex = index % 13;
+				console.log(newIndex)
+				return (
+					<div
+						key={room.id}
+						onClick={(e) => handleRoomJoin(e.target.id, dispatch)}
+						// Use the new index to get the corresponding bubble style
+						className={`${bubbleStyles[newIndex]}`}
+						id={room.id}
+					>
+						#{room.topic}
+					</div>
+				);
+			})}
           </div>
         </div>
       </div>

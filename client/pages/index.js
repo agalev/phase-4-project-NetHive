@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Auth from '../hooks/auth'
 
 export default function Home() {
-	Auth()
+	// Auth()
 	return (
 		<div className='flex flex-col justify-center items-center h-screen bg-gray-100'>
 			<div className='bg-gradient-to-br from-blue-600 to-purple-600 rounded-md p-8 mb-10 animate-gradient'>

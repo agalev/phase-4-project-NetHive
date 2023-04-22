@@ -11,7 +11,7 @@ function Main() {
                 <div className='w-1/4'>
                     <SideBar/>
                 </div>
-                <div className='w-3/4'>
+                <div className=' overflow-hidden w-3/4'>
                     <MessageDisplay />
                 </div>
             </div>
