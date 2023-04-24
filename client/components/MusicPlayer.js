@@ -22,6 +22,21 @@ const audioSources = [
     title: "Jeremy",
     artist: "Pearl Jam",
   },
+  {
+    src: "/Audio/5.mp3",
+    title: "Around The World",
+    artist: "Daft Punk"
+  },
+  {
+    src: "Audio/6.mp3",
+    title: "Umbrella",
+    artist: "Rihanna Ft. Jay Z"
+  },
+  {
+    src: "Audio/7.mp3",
+    title: "Better Off Alone",
+    artist: "Alice Deejay"
+  }
 ];
 
 function MusicPlayer() {
@@ -30,6 +45,7 @@ function MusicPlayer() {
   const audioRef = useRef(null);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [skipCount, setSkipCount] = useState(0);
+  const [playbackTime, setPlayBackTime] = useState(0);
   const theme = useSelector((state) => state.user.userTheme)
 
   const colorGradients = {
@@ -46,9 +62,12 @@ function MusicPlayer() {
     if (!isPlaying) {
       audio.src = audioSources[currentTrackIndex].src;
       audio.volume = volume;
+      audio.currentTime = playbackTime;
       audio.play();
       setIsPlaying(true);
     } else {
+      setPlayBackTime(audio.currentTime)
+      console.log(playbackTime)
       audio.pause();
       setIsPlaying(false);
     }
@@ -58,11 +77,13 @@ function MusicPlayer() {
     const audio = audioRef.current;
 
     if (currentTrackIndex < audioSources.length - 1) {
+      setPlayBackTime(0)
       setCurrentTrackIndex(currentTrackIndex + 1);
       audio.src = audioSources[currentTrackIndex + 1].src;
       audio.volume = volume;
       audio.play();
     } else {
+      setPlayBackTime(0)
       audio.pause();
       audio.currentTime = 0;
       setCurrentTrackIndex(0);
@@ -73,6 +94,7 @@ function MusicPlayer() {
   };
 
   const handleNextTrack = () => {
+    setPlayBackTime(0)
     const nextIndex = (currentTrackIndex + 1) % audioSources.length;
     setCurrentTrackIndex(nextIndex);
     const audio = audioRef.current;
@@ -82,6 +104,28 @@ function MusicPlayer() {
       audio.play();
     }
     setSkipCount(skipCount + 1); 
+  };
+
+    const handlePreviousTrack = () => {
+    setPlayBackTime(0)
+    let prevIndex = (currentTrackIndex - 1) % audioSources.length;
+    setCurrentTrackIndex(prevIndex);
+    const audio = audioRef.current;
+    if(prevIndex == -1){
+      prevIndex = 5
+      setCurrentTrackIndex(prevIndex);
+      audio.src = audioSources[prevIndex].src;
+      audio.volume = volume;
+    if (isPlaying) {
+      audio.play();
+    }
+    }
+    audio.src = audioSources[prevIndex].src;
+    audio.volume = volume;
+    if (isPlaying) {
+      audio.play();
+    }
+    setSkipCount(skipCount - 1); 
   };
   
 
@@ -125,11 +169,22 @@ function MusicPlayer() {
           
         </div>
       </div>
-      <button className="next-button ml-auto text-lg" onClick={handleNextTrack}>Vote To Skip ({skipCount})</button>
-        <button className="play-pause-button" onClick={handlePlayPause}>
+      <div className="volume-control flex items-center space-x-2">
+        <button type="button" class="hidden sm:block lg:hidden xl:block" onClick={handlePreviousTrack} aria-label="Previous">
+            <svg width="24" height="24" fill="none">
+              <path d="m10 12 8-6v12l-8-6Z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M6 6v12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        <button className="play-pause-button text-2xl" onClick={handlePlayPause}>
               {isPlaying ? "II" : "▶"}
             </button>
-      <div className="volume-control flex items-center space-x-2">
+      <button type="button" class="hidden sm:block lg:hidden xl:block"  onClick={handleNextTrack} aria-label="Next">
+      <svg width="24" height="24" fill="none">
+        <path d="M14 12 6 6v12l8-6Z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M18 6v12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      </button>
         <button
           className="volume-down-button"
           onClick={() => setVolume(Math.max(0, volume - 0.1))}

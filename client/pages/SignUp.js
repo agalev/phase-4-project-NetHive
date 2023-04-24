@@ -5,6 +5,7 @@ import * as yup from 'yup'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { login, setInitalImage } from '../store/userSlice'
+import { useEffect } from 'react'
 
 const MAX_IMAGE_SIZE = 1024 * 1024;
 const SUPPORTED_IMAGE_FORMATS = ['image/jpeg', 'image/png'];
@@ -45,6 +46,9 @@ export default function SignUpModal() {
   const dispatch = useDispatch()
   const router = useRouter()
 
+    useEffect(() => {
+      console.log('refresh')
+    },[])
 
   const handleSubmit = (values) => {
     console.log(values)

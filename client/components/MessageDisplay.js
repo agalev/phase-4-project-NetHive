@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Form } from 'formik'
 import MusicPlayer from './MusicPlayer'
 import { useDispatch, useSelector } from 'react-redux'
 import { setDisplayMessages, setLoggedUserRooms } from '../store/userSlice'
@@ -10,6 +11,7 @@ function MessageDisplay() {
 	const currentMessages = useSelector((state) => state.user.displayMessages)
 	const [rooms, setRooms] = useState([])
 	const [newMessage, setNewMessage] = useState('')
+	
 	useEffect(() => {
 		fetch('/rooms')
 			.then((response) => response.json())
@@ -92,13 +94,6 @@ function MessageDisplay() {
 			.catch((error) => console.error(error))
 	}
 }
-
-const getRoomStyle = (index) => {
-	const styleIndex = index % 10; // get a number between 0 and 9
-	return styleIndex;
-  };
-  
-  let counter = 0;
 
     if (rooms.length === 0) {
       return (

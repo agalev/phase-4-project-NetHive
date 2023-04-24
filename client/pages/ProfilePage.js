@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import { useSelector, useDispatch } from "react-redux";
 import Link from "next/link";
 import Header2 from "../components/Header2";
+import Auth from "../hooks/auth";
+
 
 import {
   setLoggedUserFirstName,
@@ -23,6 +25,10 @@ function ProfilePage() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState(loggedUser.user.email);
   const [selectedImageFile, setSelectedImageFile] = useState(null);
+
+  if (loggedUser){
+    Auth()
+  }
 
   const dispatch = useDispatch();
 
@@ -113,9 +119,10 @@ function ProfilePage() {
   };
 
   return (
-    <div className={`${colorGradients[theme]} min-h-screen `}>
-      <Header2 />
-      <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-10 mt-36">
+    <>
+    <Header2 />
+    <div className={`${colorGradients[theme]} flex flex-col vh-100 justify-center items-center`} style={{ height: 'calc(100vh - 80px)'}}>
+      <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-10 ">
         <h2 className="text-3xl font-bold text-gray-800 text-center w-full">
           Account Details
         </h2>
@@ -145,7 +152,7 @@ function ProfilePage() {
             <label className="font-bold mr-9 ml-9">First Name:</label>
             <span className="ml-2 ">{loggedUser.user.first_name}</span>
             <button
-              onClick={() => setFirstNameEditMode(true)}
+              onClick={() => setFirstNameEditMode(!firstNameEditMode)}
               className="ml-2 text-gray-500 hover:text-gray-800"
             >
               Edit
@@ -172,7 +179,7 @@ function ProfilePage() {
             <label className="font-bold mr-9 ml-9  ">Last Name:</label>
             <span className="ml-2">{loggedUser.user.last_name}</span>
             <button
-              onClick={() => setLastNameEditMode(true)}
+              onClick={() => setLastNameEditMode(!lastNameEditMode)}
               className="ml-2 text-gray-500 hover:text-gray-800 "
             >
               Edit
@@ -258,7 +265,8 @@ function ProfilePage() {
       {/* <a className="text-blue-500 hover:text-blue-700">Back to Home</a> */}
       {/* </Link> */}
     </div>
-    // </div>
+    </div>
+    </>
   );
 }
 

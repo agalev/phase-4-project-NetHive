@@ -1,8 +1,16 @@
 import Link from 'next/link'
-import Auth from '../hooks/auth'
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import Auth from '../hooks/auth';
+import { useSelector } from 'react-redux';
 
 export default function Home() {
-	// Auth()
+	const loggedUser = useSelector((state) => state.user.displayMessages)
+
+		if (loggedUser){
+			Auth()
+		}
+
 	return (
 		<div className='flex flex-col justify-center items-center h-screen bg-gray-100'>
 			<div className='bg-gradient-to-br from-blue-600 to-purple-600 rounded-md p-8 mb-10 animate-gradient'>

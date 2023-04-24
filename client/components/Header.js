@@ -12,8 +12,11 @@ function Header() {
   const theme = useSelector((state) => state.user.userTheme)
   const dispatch = useDispatch();
   const router = useRouter();
-  // console.log(imagepath)
-  // console.lo
+
+  if (loggedUser){
+    Auth()
+  }
+
   const colorGradients = {
     blue: 'bg-gradient-to-r from-my-blue to-my-purple',
     orange: 'bg-gradient-to-r from-my-orange to-my-red',
@@ -21,9 +24,7 @@ function Header() {
     // Add more color gradients as needed
   };
 
-
   useEffect(() => {
-    if (loggedUser) {
       // fetch the image using the dynamic path
       fetch(`/api/getImage?imagePath=${encodeURIComponent(imagepath)}`)
         .then(response => response.blob())
@@ -32,8 +33,7 @@ function Header() {
           dispatch(setLoggedUserImage(url));
         })
         .catch(error => console.error(error));
-    }
-  }, []);
+  }, [imagepath]);
 
   function handleLogOut(){
     fetch('/logout', {
@@ -42,6 +42,7 @@ function Header() {
       .then(response => {
         if (response.ok) {
           console.log('Logged out successfully');
+          router.push('/')
         } else {
           console.log('Logout failed');
         }
@@ -66,7 +67,7 @@ function Header() {
 </div>
 
       <div className="flex items-center w-12 h-12 cursor-pointer hover:opacity-75">
-        {loggedUser.user.image ? (
+        {loggedUser?.user?.image ? (
           <Link href="/ProfilePage">
               <img
                 id='profile-button'
@@ -80,7 +81,7 @@ function Header() {
           </Link>
         ) : (
           <Link href="/ProfilePage">
-              <Image
+              <img
                 id='profile-button'
                 className="w-full h-full rounded-full object-cover"
                 style={{objectFit: "cover"}}

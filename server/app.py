@@ -10,6 +10,13 @@ from config import app, api, db, socketio
 
 from models import User, Conversation, Room, RoomUser
 
+@app.route('/')
+@app.route('/<int:id>')
+def index(id=0):
+    return render_template("index.html")
+
+
+
 @app.before_request
 def before_request():
     if 'user_id' not in session and request.endpoint not in ['login', 'signup']:
@@ -18,7 +25,7 @@ def before_request():
 class CheckAuth(Resource):
     def get(self):
         if 'user_id' in session:
-            return User.query.filter(User.id == session['user_id']).first().to_dict(only = ('id','first_name','last_name','email','image','is_online')), 200
+            return User.query.filter(User.id == session['user_id']).first().to_dict(only = ('id','first_name','last_name','email','image','is_online', 'rooms.room')), 200
         return {'error': 'Not logged in'}, 401
     
 class Signup(Resource):

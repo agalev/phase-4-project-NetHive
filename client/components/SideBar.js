@@ -41,7 +41,7 @@ function SideBar() {
             })
     }, [])
 
-    if (!loggedUser.user.rooms) {
+    if (!loggedUser.user?.rooms) {
         return (
             <div
                 className={`${colorGradients[theme]} text-gray-900 flex flex-col h-screen border-r-2 border-black`}
@@ -153,10 +153,10 @@ return (
             </div>
             <div className='h-60 overflow-y-scroll'>
         <section>
-        {!showusersearch && users && users.map((user) => (
+        {!showusersearch && Array.isArray(users) && users?.map((user) => (
             <UserPill currInterval={currInterval} setCurrInterval={setCurrInterval} key={user.id} user={user} />
         ))}
-        {showusersearch && users
+        {showusersearch && Array.isArray(users) && users
             .filter((user) => user.first_name.toLowerCase().includes(usersearchValue.toLowerCase()))
             .map((user) => (
                 <UserPill currInterval={currInterval} setCurrInterval={setCurrInterval} key={user.id} user={user} />
